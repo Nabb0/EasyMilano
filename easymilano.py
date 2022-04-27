@@ -34,22 +34,19 @@ def register():
     if request.method == 'GET':
         return  render_template('register.html')
     else: 
-        name = request.form.get('name')
-        surname = request.form.get('surname')
-        via = request.form.get('via')
-        pwd = request.form.get('pwd')
-        cpwd = request.form.get('cpwd')
+        name = request.args['name']
+        surname = request.args['surname']
+        via = request.args['via']
+        pwd = request.args['pwd']
+        cpwd = request.args['cpwd']
 
-
-
-    
-        
-        if name != '' and pwd != '' and surname != '' and pwd == cpwd and via != '':
-            new_dati = {'name':name, 'pwd':pwd, 'surname':surname , 'via' : via}
-            dati = dati.append(new_dati,ignore_index=True)
-            return redirect(url_for(''))
-        else:
-            return f'errore {username,pwd,cpwd,sex}'
+    if name != '' and pwd != '' and surname != '' and pwd == cpwd and via != '':
+        df = pd.read_csv('static/file/dati.csv')
+        df.append({'name': name, 'surname': surname,'via' : via,'pwd': pwd}, ignore_index=True)   
+        df.to_csv('static/file/dati.csv')
+        return render_template('ok.html',name = name, surname = surname, via = via, pwd = pwd, df = df)
+    else:
+        return f'errore {username,pwd,cpwd,sex}'
 
 
 
