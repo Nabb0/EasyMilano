@@ -1,1 +1,1 @@
-Un progetto che punta permette di trovare determinati punti piu semplicemente
+Un progetto che permette di trovare determinati punti importranti di milano piu semplicemente
