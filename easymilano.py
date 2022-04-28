@@ -39,14 +39,17 @@ def register():
         via = request.args['via']
         pwd = request.args['pwd']
         cpwd = request.args['cpwd']
-
-    if name != '' and pwd != '' and surname != '' and pwd == cpwd and via != '':
-        df = pd.read_csv('static/file/dati.csv')
-        df.append({'name': name, 'surname': surname,'via' : via,'pwd': pwd}, ignore_index=True)   
-        df.to_csv('static/file/dati.csv')
-        return render_template('ok.html',name = name, surname = surname, via = via, pwd = pwd, df = df)
-    else:
-        return f'errore {username,pwd,cpwd,sex}'
+        
+    df1 = pd.read_csv('dati.csv')
+    
+    
+    nuovi_dati = {'name': name, 'surname': surname,'via' : via,'pwd': pwd}
+    
+    df1 = df1.append(nuovi_dati,ignore_index=True)
+    
+    
+    df1.to_csv('dati.csv', index=False)
+    rdf1 = df1.to_html()
 
 
 

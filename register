@@ -1,0 +1,18 @@
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if request.method == 'GET':
+        return  render_template('register.html')
+    else: 
+        name = request.args['name']
+        surname = request.args['surname']
+        via = request.args['via']
+        pwd = request.args['pwd']
+        cpwd = request.args['cpwd']
+
+    if name != '' and pwd != '' and surname != '' and pwd == cpwd and via != '':
+        df = pd.read_json()('static/file/dati.json')
+        df.append({'name': name, 'surname': surname,'via' : via,'pwd': pwd}, ignore_index=True)   
+        df.to_json('static/file/dati.json')
+        return render_template('ok.html',name = name, surname = surname, via = via, pwd = pwd, df = df)
+    else:
+        return f'errore {username,pwd,cpwd,sex}'
