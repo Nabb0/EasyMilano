@@ -36,25 +36,63 @@ stradario = pd.read_csv('/workspace/EasyMilano/static/file/stradario (2).csv')
 def home():
     return render_template('home.html')
 
+#_______________________________________________________________________
 
+
+
+                        #register
+
+                   
+# _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'GET':
-        return render_template('register.html')
-    elif request.method == 'POST':
+    if request.method == 'POST':
+
         name = request.form.get("name")
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
         cpsw = request.form.get("cpwd")
+        email = request.form.get("email")
         via = request.form.get("via")
-        if psw==cpsw:
-            dati.append({name: name,surname:surname,psw:psw,via:via},ignore_index=True)
-            dati.to_json("/workspace/EasyMilano/static/file/dati.json")
-            
-            return render_template('a.html')
+        df = pd.read_json("./static/file/dati.json")
+        if cpsw== psw:
+            df= df.append({'name': name,'surname':surname,'email' : email, 'psw':psw,'via':via},ignore_index=True)
+            df.to_json("./static/file/dati.json")
+            return render_template('a.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email)
         else:
             return "le password non corrispondono"
+    else:
+        return render_template('register.html')
+#_______________________________________________________________________
 
+
+
+                             #login
+
+
+#_______________________________________________________________________
+@app.route('/login', methods=['GET', 'POST'])
+def log2():
+    if request.method == 'POST':
+        log_name = request.form.get('name')
+        log_surname = request.form.get('surname')
+        log_psw = request.form.get('password')
+        confirm_psw = request.form.get('confpassword')
+        sex = request.form.get('sex')
+        log_email = request.form.get('email')
+        df = pd.read_json("./static/files/data.json")
+
+
+
+        for i in df:
+            if log_email == i['email'] & log_psw == i['password']:  
+                return render_template("ok.html")
+            else:
+                return '<h1>Errore</h1>'
+    else:
+        return render_template('log.html')
+    
+#_______________________________________________________________________
 
 
 # verifico se posso scrivere
