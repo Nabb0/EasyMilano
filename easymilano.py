@@ -14,19 +14,19 @@ matplotlib.use('Agg')
 # Dichiarazioni dei geodataframe
 dati = pd.read_json("/workspace/EasyMilano/static/file/dati.json")
 
-quartieri = gpd.read_file(
-    '/workspace/EasyMilano/static/file/ds964_nil_wm-20220405T093028Z-001.zip')
-mezzi_superficie = gpd.read_file(
-    '/workspace/EasyMilano/static/file/tpl_percorsi.geojson')
-uffici_postali = pd.read_csv(
-    '/workspace/EasyMilano/static/file/uffici_postali_milano.csv')
+quartieri = gpd.read_file('/workspace/EasyMilano/static/file/ds964_nil_wm-20220405T093028Z-001.zip')
+
+mezzi_superficie = gpd.read_file('/workspace/EasyMilano/static/file/tpl_percorsi.geojson')
+
+uffici_postali = pd.read_csv('/workspace/EasyMilano/static/file/uffici_postali_milano.csv')
+
 civici = pd.read_csv('/workspace/EasyMilano/static/file/civici.csv')
-comandi_polizialocale = gpd.read_file(
-    '/workspace/EasyMilano/static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
-scuole = pd.read_csv(
-    '/workspace/EasyMilano/static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
-metro = gpd.read_file(
-    '/workspace/EasyMilano/static/file/tpl_metropercorsi.geojson')
+
+comandi_polizialocale = gpd.read_file('/workspace/EasyMilano/static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
+
+scuole = pd.read_csv('/workspace/EasyMilano/static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
+metro = gpd.read_file('/workspace/EasyMilano/static/file/tpl_metropercorsi.geojson')
+
 stradario = pd.read_csv('/workspace/EasyMilano/static/file/stradario (2).csv')
 
 # home e registrazione
@@ -56,9 +56,9 @@ def register():
         via = request.form.get("via")
         df = pd.read_json("./static/file/dati.json")
         if cpsw== psw:
-            df= df.append({'name': name,'surname':surname,'email' : email, 'psw':psw,'via':via},ignore_index=True)
+            df= df.append({'name': [name],'surname':[surname],'email' : [email], 'psw':[psw],'via':[via]},ignore_index=True)
             df.to_json("./static/file/dati.json")
-            return render_template('a.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email)
+            return render_template('login.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email)
         else:
             return "le password non corrispondono"
     else:
@@ -72,26 +72,21 @@ def register():
 
 #_______________________________________________________________________
 @app.route('/login', methods=['GET', 'POST'])
-def log2():
+def login():
     if request.method == 'POST':
-        log_name = request.form.get('name')
-        log_surname = request.form.get('surname')
-        log_psw = request.form.get('password')
-        confirm_psw = request.form.get('confpassword')
-        sex = request.form.get('sex')
+        log_pwd = request.form.get('pwd')
         log_email = request.form.get('email')
-        df = pd.read_json("./static/files/data.json")
+        df = pd.read_json("./static/file/dati.json")
 
 
 
-        for i in df:
-            if log_email == i['email'] & log_psw == i['password']:  
+        for _, r in df.iterrows():
+            if log_email == r['email'] and log_pwd == r['pwd']:  
                 return render_template("ok.html")
-            else:
-                return '<h1>Errore</h1>'
+
+        return '<h1>Errore</h1>'
     else:
-        return render_template('log.html')
-    
+        return render_template('login.html')
 #_______________________________________________________________________
 
 
