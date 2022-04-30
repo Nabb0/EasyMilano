@@ -18,7 +18,7 @@ quartieri = gpd.read_file('/workspace/EasyMilano/static/file/ds964_nil_wm-202204
 
 mezzi_superficie = gpd.read_file('/workspace/EasyMilano/static/file/tpl_percorsi.geojson')
 
-uffici_postali = pd.read_csv('/workspace/EasyMilano/static/file/uffici_postali_milano.csv')
+uffici_postali = gpd.read_file('/workspace/EasyMilano/static/file/ds555_uffici_postali_milano_final.geojson')
 
 civici = pd.read_csv('/workspace/EasyMilano/static/file/civici.csv')
 
@@ -162,7 +162,6 @@ def selezione2():
  elif scelta=="2":
     return render_template()
  elif scelta=="3":
-
   return render_template("mappafinaleqt.html")
  elif scelta=="4":
   return render_template()
@@ -174,7 +173,7 @@ def mappaposte():
 
     fig, ax = plt.subplots(figsize = (12,8))
     
-    uffici_postali.plot(ax=ax,color  = 'r')
+    uffici_postali.to_crs(epsg=3857).plot(ax=ax,color  = 'r')
     quartieri.to_crs(epsg=3857).plot(ax=ax)
     contextily.add_basemap(ax=ax)
     output = io.BytesIO()
