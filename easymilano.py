@@ -119,7 +119,7 @@ def visualizzaqt():
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  quartiere2=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
- if scelta==3:
+ if scelta=="3":
     area = quartiere2.geometry.area/10**6
     return render_template('Lunghezzaqt.html',area=area) 
  else:
@@ -129,7 +129,7 @@ def visualizzaqt():
 
 @app.route('/mappa', methods=['GET'])
 def mappa():
- if scelta==1:
+ if scelta=="1":
     fig, ax = plt.subplots(figsize = (12,8))
     quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
     contextily.add_basemap(ax=ax)
