@@ -109,7 +109,7 @@ def selezione():
  elif scelta=="2":
     return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="3":
-    return render_template()
+    return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="4":
   return render_template()
 
@@ -118,9 +118,10 @@ def visualizzaqt():
  global quartiere
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
+ quartiere2=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  if scelta==3:
-
-     return render_template('Lunghezzaqt.html') 
+    area = quartiere2.geometry.area/10**6
+    return render_template('Lunghezzaqt.html',area=area) 
  else:
   return render_template('mappafinaleqt.html') 
  
