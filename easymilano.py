@@ -101,7 +101,7 @@ def quartieriFunzione ():
 def selezione():
     scelta = request.args["radio"]
     if scelta=="1":
-        return render_template('input.html')
+        return render_template('')
     elif scelta=="2":
         return render_template()
     elif scelta=="3":
