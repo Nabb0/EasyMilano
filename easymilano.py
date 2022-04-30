@@ -174,7 +174,7 @@ def mappaposte():
     fig, ax = plt.subplots(figsize = (12,8))
     
     uffici_postali.to_crs(epsg=3857).plot(ax=ax,color  = 'r')
-    quartieri.to_crs(epsg=3857).plot(ax=ax)
+    quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
     contextily.add_basemap(ax=ax)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
