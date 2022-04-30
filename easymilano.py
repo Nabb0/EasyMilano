@@ -88,11 +88,27 @@ def login():
     else:
         return render_template('login.html')
 #_______________________________________________________________________
+#quartieri
+#_______________________________________________________________________
+@app.route('/quartieri', methods=['GET'])
+def quartieriFunzione ():
+    return render_template('quartieriFunzione.html')
 
 
-# verifico se posso scrivere
 
+
+@app.route('/selezione', methods=['GET'])
+def selezione():
+    scelta = request.args["radio"]
+    if scelta=="1":
+        return render_template('input.html')
+    elif scelta=="2":
+        return render_template()
+    elif scelta=="3":
+        return render_template()
+    elif scelta=="4":
+        return render_template()
+  
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)
-ciao
