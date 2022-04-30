@@ -99,9 +99,11 @@ def quartieriFunzione ():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
- global lista_qt
+ global lista_qt,scelta
  lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
  scelta = request.args["radio"]
+
+
  if scelta=="1":
     return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="2":
@@ -111,6 +113,23 @@ def selezione():
  elif scelta=="4":
   return render_template()
 
+@app.route('/visualizzaqt', methods=['GET'])
+def pippo():
+ global quartiere
+ nome_quartiere=request.args["quartiere"]
+ quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
+ return render_template('mappafinaleqt.html') 
+
+@app.route('/mappa', methods=['GET'])
+def mappa():
+
+    fig, ax = plt.subplots(figsize = (12,8))
+
+    quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')           
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)

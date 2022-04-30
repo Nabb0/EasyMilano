@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <link rel= "stylesheet" type= "text/css" href= "./static/css/style.css">
-  <title>Document</title>
+  <title>EasyMilano</title>
 </head>
 <body>
   <header>
@@ -13,7 +13,7 @@
     <img src="static/images/images home/metro grandeArtboard 1.png" id="metro">
     <img src="static/images/images home/school grandeArtboard 1.png" id="school">
     <img src="static/images/images home/blu grandeArtboard 1.png" alt="blu">
-    <h2 id="text">EeasyMilano</h2>
+    <h2 id="text">EasyMilano</h2>
     <img src="static/images/images home/posta grandeArtboard 1.png" id="poste">
  
     
@@ -54,9 +54,11 @@
 
     window.addEventListener('scroll',function(){
       let value = window.scrollY;
+      let valuex = window.scrollX;
       poste.style.down = value * 0.25 + 'px';
       school.style.top = value * 0.35 + 'px';
-      text.style.marginRight =  value * 3 + 'px';
+      text.style.marginRight =  value * 3.15 + 'px';
+      text.style.appearance =  value * 3.15 + 'px';
       btn.style.marginRight =  value * 1 + 'px';
       header.style.top = value * 0.5 + 'px';
     })
