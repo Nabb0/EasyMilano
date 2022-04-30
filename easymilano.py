@@ -99,16 +99,18 @@ def quartieriFunzione ():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
-    scelta = request.args["radio"]
-    if scelta=="1":
-        return render_template('')
-    elif scelta=="2":
-        return render_template()
-    elif scelta=="3":
-        return render_template()
-    elif scelta=="4":
-        return render_template()
-  
+ global lista_qt
+ lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
+ scelta = request.args["radio"]
+ if scelta=="1":
+    return render_template('scelta.html',quartieri=lista_qt)
+ elif scelta=="2":
+    return render_template()
+ elif scelta=="3":
+    return render_template()
+ elif scelta=="4":
+  return render_template()
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)

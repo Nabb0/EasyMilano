@@ -14,13 +14,12 @@
     <img src="static/images/images home/school grandeArtboard 1.png" id="school">
     <img src="static/images/images home/blu grandeArtboard 1.png" alt="blu">
     <h2 id="text">EeasyMilano</h2>
-    <a href="#sec" id="btn">Explore</a>
     <img src="static/images/images home/posta grandeArtboard 1.png" id="poste">
  
     
 
   </section>
-  <div class="sec" id="sec" >
+  <div class="sec" >
     <!-- immagini per le route -->
     <h1>Scegli cosa Cercare!</h1>
     <p>Pensa poter Cercare e visualizzare in una mappa i punti di interesse vicini a te <br>
@@ -56,8 +55,8 @@
     window.addEventListener('scroll',function(){
       let value = window.scrollY;
       poste.style.down = value * 0.25 + 'px';
-      school.style.top = value * 0.25 + 'px';
-      text.style.marginRight =  value * 1.5 + 'px';
+      school.style.top = value * 0.35 + 'px';
+      text.style.marginRight =  value * 3 + 'px';
       btn.style.marginRight =  value * 1 + 'px';
       header.style.top = value * 0.5 + 'px';
     })
