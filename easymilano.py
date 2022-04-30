@@ -29,6 +29,9 @@ metro = gpd.read_file('/workspace/EasyMilano/static/file/tpl_metropercorsi.geojs
 
 stradario = pd.read_csv('/workspace/EasyMilano/static/file/stradario (2).csv')
 
+vie_milano = pd.merge(civici,stradario, on='CODICE_VIA',how='inner')
+print(vie_milano)
+
 # home e registrazione
 
 
