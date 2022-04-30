@@ -145,6 +145,46 @@ def mappa():
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')    
+#_______________________________________________________________________
+#poste
+#_______________________________________________________________________
+@app.route('/poste', methods=['GET'])
+def posteFunzione():
+    return render_template('posteFunzione.html')
+
+@app.route('/selezione2', methods=['GET'])
+def selezione2():
+ global lista_qt,scelta
+ lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
+ scelta = request.args["radio"]
+ if scelta=="1":
+    return render_template()
+ elif scelta=="2":
+    return render_template()
+ elif scelta=="3":
+
+  return render_template("mappafinaleqt.html")
+ elif scelta=="4":
+  return render_template()
+
+@app.route('/mappaposte', methods=['GET'])
+def mappaposte():
+#fare il elif di prima
+    
+
+    fig, ax = plt.subplots(figsize = (12,8))
+    
+    poste_milano.to_crs(epsg=3857).plot(ax=ax,color  = 'r')
+    quartieri.to_crs(epsg=3857).plot(ax=ax)
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')    
+
+
+    
+
+
 
 
 if __name__ == '__main__':
