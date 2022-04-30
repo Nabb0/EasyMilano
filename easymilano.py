@@ -118,7 +118,11 @@ def visualizzaqt():
  global quartiere
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
- return render_template('mappafinaleqt.html') 
+ if scelta==3:
+
+     return render_template('Lunghezzaqt.html') 
+ else:
+  return render_template('mappafinaleqt.html') 
  
 
 
