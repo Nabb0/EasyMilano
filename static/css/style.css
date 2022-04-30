@@ -144,7 +144,8 @@ section img#blu{
 .container li a:hover.active
 {
     background: #fff;
-    border-radius: 20px;
+    border-radius: 100px;
+    
 }
 
 
@@ -167,4 +168,24 @@ section img#blu{
     height: 100px;
     background: linear-gradient(to top,rgb(39, 47, 153),transparent);
     z-index: 1000;
+}
+.main-container{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.main-container h2{
+    margin: 0 0 80px 0;
+    color: rgb(225, 230, 157);
+    font-size: 30px;
+    font-family:'Courier New', Courier, monospace;
+    font-weight: 400;
+
+}
+.radio_button{
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
 }

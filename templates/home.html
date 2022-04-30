@@ -9,6 +9,8 @@
     <a href="#" class="logo"> EasyMilano</a>
     <li><a href="/register" class="active"><img src="static/images/images route/register.png" alt=""></a></li>
   </header>
+
+
   <section>
     <img src="static/images/images home/metro grandeArtboard 1.png" id="metro">
     <img src="static/images/images home/school grandeArtboard 1.png" id="school">
@@ -19,10 +21,14 @@
     
 
   </section>
+
+
+
+
   <div class="sec" >
     <!-- immagini per le route -->
     <h1>Scegli cosa Cercare!</h1>
-    <p>Pensa poter Cercare e visualizzare in una mappa i punti di interesse vicini a te <br>
+    <p  id="p">Pensa poter Cercare e visualizzare in una mappa i punti di interesse vicini a te <br>
     Trovare scuole, Poste, caserme di Polizia e tanto altro nei dintorni. <br>
     EasyMilano fa proprio questo, hai la possibilità di Trovare ciò che vuoi in un range personalizzabile <br>
     Scegliere tra i punti preferiti salvati ed arrivare in un altro punto a scelta personalizzato <br>
@@ -32,6 +38,8 @@
     </p>
     <h1>Inizia Ora!</h1>
   </div>
+
+
 <div class="container">
   <li>
     <a href="/polizia"><img src="static/images/images route/police-station.png" alt="police" target='_blank'></a>
@@ -42,6 +50,8 @@
     
     </li>
 </div>
+
+
   <script>
     let metro = document.getElementById('metro');
     let school = document.getElementById('school');
@@ -50,7 +60,7 @@
     let poste= document.getElementById('poste');
     let blu = document.getElementById('blu');
     let header = document.querySelector('header');
-
+    let p = document.querySelector('p');
 
     window.addEventListener('scroll',function(){
       let value = window.scrollY;
@@ -61,6 +71,7 @@
       text.style.appearance =  value * 3.15 + 'px';
       btn.style.marginRight =  value * 1 + 'px';
       header.style.top = value * 0.5 + 'px';
+      p.style.top = value * 0.75 +'px';
     })
   </script>
 
