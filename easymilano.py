@@ -124,7 +124,7 @@ def visualizzaqt():
 
 @app.route('/mappa', methods=['GET'])
 def mappa():
- if scelta==1:
+ 
     fig, ax = plt.subplots(figsize = (12,8))
     quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
     contextily.add_basemap(ax=ax)
