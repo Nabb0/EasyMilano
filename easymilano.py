@@ -131,17 +131,7 @@ def mappa():
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')    
- else:
-    fig, ax = plt.subplots(figsize = (12,8))
-    Qt=quartieri[quartieri.NIL.str.contains(qt_utente)]
-    QtConfinanati=quartieri[quartieri.touches(Qt.geometry.squeeze())]
-    QtConfinanati.to_crs(epsg=3857).plot(ax=ax)
-    contextily.add_basemap(ax=ax)   
 
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
-       
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)
