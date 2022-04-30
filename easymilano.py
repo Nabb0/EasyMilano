@@ -124,8 +124,17 @@ def visualizzaqt():
 
 @app.route('/mappa', methods=['GET'])
 def mappa():
- 
+ if scelta==1:
     fig, ax = plt.subplots(figsize = (12,8))
+    quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')    
+ else:
+    fig, ax = plt.subplots(figsize = (12,8))
+    QtConfinanati=quartieri[quartieri.touches(quartiere.geometry.squeeze())]
+    QtConfinanati.to_crs(epsg=3857).plot(ax=ax,facecolor='r')
     quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
     contextily.add_basemap(ax=ax)
     output = io.BytesIO()
