@@ -222,18 +222,18 @@ section img#blu{
 }
 
 
-.radio_btn>i{
-    color: #ffff;
-    background-color:rgb(235, 190, 42) ;
-    font-size: 20px;
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 50px;
-    padding: 3px;
-    transition: 0.2s;
-    pointer-events: none;
+.radio_btn > i { 
+  color: #ffff;
+  background-color:rgb(235, 190, 42) ;
+  font-size: 20px;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50px;
+  padding: 3px;
+  transition: 0.2s;
+  pointer-events: none;
 }
 .radio_btn .opt-ricerca{
     width: 80px;
@@ -264,12 +264,12 @@ section img#blu{
     transform: translateX(-50%) scale(1);
 
 }
-.p{
+.main-container .p{
     width: 100%;
     margin: 0 auto;
     text-align: center;
     display: flex;
     justify-content: space-between;
-    
+    background-color: red;
     align-items: center;
 }
