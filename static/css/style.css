@@ -95,10 +95,8 @@ section img#blu{
     white-space: nowrap;
     font-size: 7.5vw;
     z-index: 8;
-    border-style:double ;
-    border-color: rgb(59, 65, 156); 
-    border: width 2px;;
-
+    line-height: 30px;
+    border-color:rgb(48, 54, 141) ;
 }
 #btn{
     text-decoration: none;

@@ -107,29 +107,41 @@ def selezione():
  if scelta=="1":
     return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="2":
-    return render_template()
+    return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="3":
     return render_template()
  elif scelta=="4":
   return render_template()
 
 @app.route('/visualizzaqt', methods=['GET'])
-def pippo():
+def visualizzaqt():
  global quartiere
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  return render_template('mappafinaleqt.html') 
+ 
+
 
 @app.route('/mappa', methods=['GET'])
 def mappa():
-
+ if scelta==1:
     fig, ax = plt.subplots(figsize = (12,8))
-
     quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
     contextily.add_basemap(ax=ax)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')           
+    return Response(output.getvalue(), mimetype='image/png')    
+ else:
+    fig, ax = plt.subplots(figsize = (12,8))
+    Qt=quartieri[quartieri.NIL.str.contains(qt_utente)]
+    QtConfinanati=quartieri[quartieri.touches(Qt.geometry.squeeze())]
+    QtConfinanati.to_crs(epsg=3857).plot(ax=ax)
+    contextily.add_basemap(ax=ax)   
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+       
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)
