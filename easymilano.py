@@ -13,7 +13,7 @@ app = Flask(__name__)
 matplotlib.use('Agg')
 
 # Dichiarazioni dei geodataframe
-dati = pd.read_json("/workspace/EasyMilano/static/file/dati.json")
+dati = pd.read_csv("./workspace/EasyMilano/static/file/dati.csv")
 
 quartieri = gpd.read_file('/workspace/EasyMilano/static/file/ds964_nil_wm-20220405T093028Z-001.zip')
 
@@ -53,8 +53,10 @@ def home():
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-
+    if request.method == 'GET':
+        return render_template("registrazione.html")
+    else:
+        global dati
         name = request.form.get("name")
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
@@ -62,17 +64,13 @@ def register():
         email = request.form.get("email")
         via = request.form.get("via")
         civico = request.form.get('civico')
-        df = pd.read_json("./static/file/dati.json")
-
-        
-        if cpsw== psw:
-            df= df.append({'name': name,'surname':surname,'via':via,'civico':civico ,'email' : email,'psw':psw},ignore_index=True)
-            df.to_json("./static/file/dati.json")
-            return render_template('login.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email, civico = civico)
+        utente = {"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico,}
+        dati = dati.append(utente,ignore_index=True)
+        dati.to_csv('./static/file/dati.csv',index=False)
+        if psw == cpsw:
+            return redirect(url_for('login'))
         else:
-            return 'le password non corrispondono'
-    else:
-        return render_template('register.html')
+            return "<h1>LE PASSWORD NON CORRISPONDONO</h1>"
 #_______________________________________________________________________
 
 
@@ -83,24 +81,25 @@ def register():
 #_______________________________________________________________________
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-            # request input
-        log_email = request.form.get('email')
-        log_pwd = request.form.get('pwd')
+
         #dichiarazione di df. legge il file json creato per preservare i dati degli utenti
-        df = pd.read_json("./static/file/dati.json")
+        df = pd.read_json("./static/file/dati.csv")
 
+        # ciclo for di controllo alternativo
+        if request.method == 'GET':
+            return render_template('login.html')
+        else:
+            psw = request.form.get("pwd")
+            email = request.form.get("email")
+            print(psw, email)
 
+            for i in df.iterrows():
+                if email[0] == i["email"] and psw[0] == i["psw"]:  
+                    return render_template("ok.html")
 
-
-        # ciclo for di controllo
-
-        for _, r in df.iterrows():
-            if log_email == r["email"] and log_pwd == r["pwd"]:  
-                return render_template("ok.html")
-
-            return '<h1>Errore</h1>'
-
+                return '<h1>Errore</h1>'
+            else:
+                return render_template('login.html')
 
 
 #_______________________________________________________________________
