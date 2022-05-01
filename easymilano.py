@@ -64,7 +64,7 @@ def register():
         email = request.form.get("email")
         via = request.form.get("via")
         civico = request.form.get('civico')
-        utente = {"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico}
+        utente = [{"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico}]
         dati = dati.append(utente,ignore_index=True)
         dati.to_csv('./static/file/dati.csv',index=False)
         if psw == cpsw:
