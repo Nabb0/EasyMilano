@@ -29,16 +29,18 @@ comandi_polizialocale = gpd.read_file('/workspace/EasyMilano/static/file/geocode
 scuole = pd.read_csv('/workspace/EasyMilano/static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
 metro = gpd.read_file('/workspace/EasyMilano/static/file/tpl_metropercorsi.geojson')
 
+#converto entrambi in int64 dopo che dava errore, uno era string e l'altro int
+civici = civici.astype({"CODICE_VIA": int}, errors='raise') 
+stradario = stradario.astype({"CODICE_VIA": int}, errors='raise') 
 
-
+vie_milano = pd.merge(civici, stradario, on='CODICE_VIA', how='inner')
 
 # home e registrazione
 
 
 @app.route('/', methods=['GET'])
 def home():
-    civici.dtypes
-    stradario.dtypes
+
     return render_template('home.html')
 
 #_______________________________________________________________________
@@ -59,13 +61,14 @@ def register():
         cpsw = request.form.get("cpwd")
         email = request.form.get("email")
         via = request.form.get("via")
+        civico = request.form.get('civico')
         df = pd.read_json("./static/file/dati.json")
         if cpsw== psw:
-            df= df.append({'name': [name],'surname':[surname],'email' : [email], 'psw':[psw],'via':[via]},ignore_index=True)
+            df= df.append({'name': [name],'surname':[surname],'via':[via],'civico':[civico] ,'email' : [email],'psw':[psw]},ignore_index=True)
             df.to_json("./static/file/dati.json")
-            return render_template('login.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email)
+            return render_template('login.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email, civico = civico)
         else:
-            return "le password non corrispondono"
+            return 'le password non corrispondono'
     else:
         return render_template('register.html')
 #_______________________________________________________________________
@@ -79,17 +82,17 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        log_pwd = request.form.get('pwd')
         log_email = request.form.get('email')
+        log_pwd = request.form.get('pwd')
         df = pd.read_json("./static/file/dati.json")
 
 
 
         for _, r in df.iterrows():
-            if log_email == r['email'] and log_pwd == r['pwd']:  
-                return render_template("ok.html")
+            if log_email != r['email'] and log_pwd != r['pwd']:  
+                return '<h1>Errore</h1>'
 
-        return '<h1>Errore</h1>'
+        return render_template("ok.html")
     else:
         return render_template('login.html')
 #_______________________________________________________________________
@@ -124,6 +127,8 @@ def visualizzaqt():
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  quartiere2=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
+
+ 
  if scelta=="3":
     area = quartiere2.geometry.area/10**6
     return render_template('Lunghezzaqt.html',area=area) 
