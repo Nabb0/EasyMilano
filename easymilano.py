@@ -13,7 +13,7 @@ app = Flask(__name__)
 matplotlib.use('Agg')
 
 # Dichiarazioni dei geodataframe
-dati = pd.read_csv("./workspace/EasyMilano/static/file/dati.csv")
+dati = pd.read_csv("/workspace/EasyMilano/static/file/dati.csv")
 
 quartieri = gpd.read_file('/workspace/EasyMilano/static/file/ds964_nil_wm-20220405T093028Z-001.zip')
 
@@ -54,7 +54,7 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template("registrazione.html")
+        return render_template("register.html")
     else:
         global dati
         name = request.form.get("name")
@@ -64,7 +64,7 @@ def register():
         email = request.form.get("email")
         via = request.form.get("via")
         civico = request.form.get('civico')
-        utente = {"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico,}
+        utente = {"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico}
         dati = dati.append(utente,ignore_index=True)
         dati.to_csv('./static/file/dati.csv',index=False)
         if psw == cpsw:
@@ -82,24 +82,21 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-        #dichiarazione di df. legge il file json creato per preservare i dati degli utenti
-        df = pd.read_json("./static/file/dati.csv")
-
-        # ciclo for di controllo alternativo
-        if request.method == 'GET':
-            return render_template('login.html')
+    #dichiarazione di df. legge il file json creato per preservare i dati degli utenti
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        l_email = request.form.get("email")
+        l_psw = request.form.get("pwd")
+        print('email =',l_email ,'psw =', l_psw)
+        print(dati)
+        if email in dati.email.tolist():
+            email = dati[dati.email == l_email]
+            if list(utente.Password)[0] == password:    
+                session['username'] = username
+            return redirect(url_for('home'))
         else:
-            psw = request.form.get("pwd")
-            email = request.form.get("email")
-            print(psw, email)
-
-            for i in df.iterrows():
-                if email[0] == i["email"] and psw[0] == i["psw"]:  
-                    return render_template("ok.html")
-
-                return '<h1>Errore</h1>'
-            else:
-                return render_template('login.html')
+            return redirect(url_for('login'))
 
 
 #_______________________________________________________________________

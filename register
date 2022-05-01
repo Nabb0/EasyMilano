@@ -42,3 +42,24 @@ def register():
             return 'le password non corrispondono'
     else:
         return render_template('register.html')
+
+
+# vecchio login(da risolvere)
+
+        df = pd.read_json("./static/file/dati.csv")
+
+        # ciclo for di controllo alternativo
+        if request.method == 'GET':
+            return render_template('login.html')
+        else:
+            psw = request.form.get("pwd")
+            email = request.form.get("email")
+            print(psw, email)
+
+            for i in df.iterrows():
+                if email[0] == i["email"] and psw[0] == i["psw"]:  
+                    return render_template("ok.html")
+
+                return '<h1>Errore</h1>'
+            else:
+                return render_template('login.html')
