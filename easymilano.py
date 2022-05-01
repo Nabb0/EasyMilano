@@ -63,8 +63,10 @@ def register():
         via = request.form.get("via")
         civico = request.form.get('civico')
         df = pd.read_json("./static/file/dati.json")
+
+        
         if cpsw== psw:
-            df= df.append({'name': [name],'surname':[surname],'via':[via],'civico':[civico] ,'email' : [email],'psw':[psw]},ignore_index=True)
+            df= df.append({'name': name,'surname':surname,'via':via,'civico':civico ,'email' : email,'psw':psw},ignore_index=True)
             df.to_json("./static/file/dati.json")
             return render_template('login.html', name = name, surname = surname, psw = psw , via = via, df = df, email = email, civico = civico)
         else:
@@ -82,19 +84,25 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+            # request input
         log_email = request.form.get('email')
         log_pwd = request.form.get('pwd')
+        #dichiarazione di df. legge il file json creato per preservare i dati degli utenti
         df = pd.read_json("./static/file/dati.json")
 
 
 
-        for _, r in df.iterrows():
-            if log_email != r['email'] and log_pwd != r['pwd']:  
-                return '<h1>Errore</h1>'
 
-        return render_template("ok.html")
-    else:
-        return render_template('login.html')
+        # ciclo for di controllo
+
+        for _, r in df.iterrows():
+            if log_email == r["email"] and log_pwd == r["pwd"]:  
+                return render_template("ok.html")
+
+            return '<h1>Errore</h1>'
+
+
+
 #_______________________________________________________________________
 #quartieri
 #_______________________________________________________________________
@@ -127,8 +135,6 @@ def visualizzaqt():
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  quartiere2=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
-
- 
  if scelta=="3":
     area = quartiere2.geometry.area/10**6
     return render_template('Lunghezzaqt.html',area=area) 
