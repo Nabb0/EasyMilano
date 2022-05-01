@@ -6,6 +6,7 @@ import contextily
 import geopandas as gpd
 import pandas as pd
 import io
+import os
 import csv
 from flask import Flask, render_template, request, Response, redirect, url_for
 app = Flask(__name__)
@@ -20,23 +21,24 @@ mezzi_superficie = gpd.read_file('/workspace/EasyMilano/static/file/tpl_percorsi
 
 uffici_postali = gpd.read_file('/workspace/EasyMilano/static/file/ds555_uffici_postali_milano_final.geojson')
 
-civici = pd.read_csv('/workspace/EasyMilano/static/file/civici.csv')
+civici = gpd.read_file('/workspace/EasyMilano/static/file/ds634_civici_coordinategeografiche_20220401_final.geojson')
+stradario = pd.read_csv('/workspace/EasyMilano/static/file/stradario (2).csv')
 
 comandi_polizialocale = gpd.read_file('/workspace/EasyMilano/static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
 
 scuole = pd.read_csv('/workspace/EasyMilano/static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
 metro = gpd.read_file('/workspace/EasyMilano/static/file/tpl_metropercorsi.geojson')
 
-stradario = pd.read_csv('/workspace/EasyMilano/static/file/stradario (2).csv')
 
-vie_milano = pd.merge(civici,stradario, on='CODICE_VIA',how='inner')
-print(vie_milano)
+
 
 # home e registrazione
 
 
 @app.route('/', methods=['GET'])
 def home():
+    civici.dtypes
+    stradario.dtypes
     return render_template('home.html')
 
 #_______________________________________________________________________
