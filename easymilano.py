@@ -13,21 +13,21 @@ app = Flask(__name__)
 matplotlib.use('Agg')
 
 # Dichiarazioni dei geodataframe
-dati = pd.read_csv("/workspace/EasyMilano/static/file/dati.csv")
+dati = pd.read_csv("./static/file/dati.csv")
 
-quartieri = gpd.read_file('/workspace/EasyMilano/static/file/ds964_nil_wm-20220405T093028Z-001.zip')
+quartieri = gpd.read_file('./static/file/ds964_nil_wm-20220405T093028Z-001.zip')
 
-mezzi_superficie = gpd.read_file('/workspace/EasyMilano/static/file/tpl_percorsi.geojson')
+mezzi_superficie = gpd.read_file('./static/file/tpl_percorsi.geojson')
 
-uffici_postali = gpd.read_file('/workspace/EasyMilano/static/file/ds555_uffici_postali_milano_final.geojson')
+uffici_postali = gpd.read_file('./static/file/ds555_uffici_postali_milano_final.geojson')
 
-civici = gpd.read_file('/workspace/EasyMilano/static/file/ds634_civici_coordinategeografiche_20220401_final.geojson')
-stradario = pd.read_csv('/workspace/EasyMilano/static/file/stradario (2).csv')
+civici = gpd.read_file('./static/file/ds634_civici_coordinategeografiche_20220401_final.geojson')
+stradario = pd.read_csv('./static/file/stradario (2).csv')
 
-comandi_polizialocale = gpd.read_file('/workspace/EasyMilano/static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
+comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
 
-scuole = pd.read_csv('/workspace/EasyMilano/static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
-metro = gpd.read_file('/workspace/EasyMilano/static/file/tpl_metropercorsi.geojson')
+scuole = pd.read_csv('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
+metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
 
 #converto entrambi in int64 dopo che dava errore, uno era string e l'altro int
 civici = civici.astype({"CODICE_VIA": int}, errors='raise') 
@@ -37,7 +37,7 @@ vie_milano = pd.merge(civici, stradario, on='CODICE_VIA', how='inner')
 
 # home e registrazione
 
-
+#a
 @app.route('/', methods=['GET'])
 def home():
 
@@ -53,10 +53,12 @@ def home():
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+
+    global utente
+
     if request.method == 'GET':
-        return render_template("register.html")
+        return render_template('register.html')
     else:
-        global dati
         name = request.form.get("name")
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
@@ -64,14 +66,15 @@ def register():
         email = request.form.get("email")
         via = request.form.get("via")
         civico = request.form.get('civico')
+        
         utente = [{"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico}]
-        utente = utente
-        dati = dati.append(utente,ignore_index=True)
-        dati.to_csv('./static/file/dati.csv',index=False)
-        if psw == cpsw:
-            return redirect(url_for('login'))
+        
+        if cpsw!= psw:
+            return 'le password non corrispondono'
         else:
-            return "<h1>LE PASSWORD NON CORRISPONDONO</h1>"
+            dati_append = dati.append(utente,ignore_index=True)
+            dati_append.to_csv('./static/file/dati.csv',index=False)
+            return render_template('login.html', name = name, surname = surname, psw = psw , via = via,utente = utente, email = email, civico = civico)
 #_______________________________________________________________________
 
 
@@ -84,24 +87,28 @@ def register():
 def login():
 
     #dichiarazione di df. legge il file json creato per preservare i dati degli utenti
-    if request.method == 'GET':
-        return render_template('login.html')
-    else:
-        l_email = request.form.get("email")
-        l_psw = request.form.get("pwd")
-        print('email =',l_email ,'psw =', l_psw)
-        print(dati)
-        if email in dati.email.tolist():
-            email = dati[dati.email == l_email]
-            if list(utente.Password)[0] == password:    
-                session['username'] = username
-            return redirect(url_for('home'))
-        else:
-            return redirect(url_for('login'))
+
+        # ciclo for di controllo alternativo
+        if request.method == 'GET':
+            return render_template('login.html')
+        elif request.method == 'POST':
+            psw = request.form.get("pwd")
+            email = request.form.get("email")
+            print(psw, email)
+
+            for _, r in dati.iterrows():
+                if email == r["email"] and psw == r["psw"]:  
+                    return '<h1>Login</h1>'
+
+            return '<h1>Errore</h1>'
 
 
 #_______________________________________________________________________
+
+
 #quartieri
+
+
 #_______________________________________________________________________
 @app.route('/quartieri', methods=['GET'])
 def quartieriFunzione ():

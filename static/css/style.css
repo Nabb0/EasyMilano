@@ -16,20 +16,20 @@ header{
     top: 0;
     left: 0;
     width: 100%;
-    padding: 30px 30px;
+    padding: 10px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 10000;
     background: rgba(0,0,0,0.4);
 }
-header .logo{
-    color: #fff;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 4em;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.logo img{
+
+    max-width: 30%;  
+    height: auto;  
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 header li{
     display: flex;
@@ -56,7 +56,8 @@ section{
     position: relative;
     width: 100%;
     height: 100vh;
-    padding: 100px;
+    margin: 0px;
+    padding: 0px;
     display:flex;
     justify-content: center;
     align-items: center;
@@ -66,6 +67,8 @@ section::before{
     content: '';
     position: absolute;
     bottom: 0;
+    margin: 0px;
+    padding: 0px;
     width: 100%;
     height: 100px;
     background: linear-gradient(to top,rgb(39, 47, 153),transparent);
@@ -77,8 +80,10 @@ section img{
     left: 0;
     width: 100%;
     height: 100vh;
-    padding: 100px;
+    padding: 0px;
     object-fit:cover;
+    background-size: cover;
+    background-attachment: fixed;
 }
 section img#poste{
     z-index: 11;
