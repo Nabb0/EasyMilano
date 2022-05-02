@@ -4,6 +4,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import contextily
 import geopandas as gpd
+import folium
 import pandas as pd
 import io
 import os
@@ -33,7 +34,14 @@ metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
 civici = civici.astype({"CODICE_VIA": int}, errors='raise') 
 stradario = stradario.astype({"CODICE_VIA": int}, errors='raise') 
 
-vie_milano = pd.merge(civici, stradario, on='CODICE_VIA', how='inner')
+vie_milano = pd.merge(civici, stradario, on='CODICE_VIA', how='inner').to_csv('static/file/vie_milano.csv',index=False)
+
+#Dichiarazioni di variabili__________________________________________________________________________________________________________________________________
+y_map = folium.Map(location=[45.46409946028481, 9.19187017173384], tiles='cartodbpositron', zoom_start=12)
+shapes = gpd.GeoSeries(quartieri['geometry']).simplify(tolerance=0.000)
+shapes = shapes.to_json()
+shapes = folium.GeoJson(data=shapes, style_function=lambda x: {"fillOpacity": 0, 'color': 'gray'})
+shapes.add_to(my_map)
 
 # home e registrazione
 
