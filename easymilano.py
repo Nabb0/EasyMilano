@@ -215,6 +215,63 @@ def mappaposte():
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')    
 
+#_______________________________________________________________________
+#polizia
+#_______________________________________________________________________
+@app.route('/polizia', methods=['GET'])
+def polizia():
+    return render_template("PoliziaFunzione.html")
+
+@app.route('/selezione3', methods=['GET'])
+def selezione3():
+ global lista_qt,scelta
+ lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
+ scelta = request.args["scelta"]
+ if scelta=="1":
+    return render_template("sceltaPoliziaAction.html",quartieri=lista_qt)
+ elif scelta=="2":
+    return render_template()
+ elif scelta=="3":
+  return render_template("mappafinalepolizia.html")
+
+#copia
+
+@app.route('/mappapolizia', methods=['GET'])
+def mappapolizia():
+    #poste in qt selto
+    
+ if scelta=="1":
+  NIL_utente = request.args["quartiere"]
+  quartiere=quartieri[quartieri.NIL.str.contains(NIL_utente)]
+  uffici_polizia_nil=comandi_polizialocale[comandi_polizialocale.NIL.str.contains(NIL_utente)]
+
+  #immagine
+  fig, ax = plt.subplots(figsize = (12,8))
+    
+  uffici_polizia_nil.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+  quartiere.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  contextily.add_basemap(ax=ax)
+  output = io.BytesIO()
+  FigureCanvas(fig).print_png(output)
+  return Response(output.getvalue(), mimetype='image/png')    
+
+
+  return render_template("mappafinaleposte.html")
+ elif scelta=="2":
+    
+    
+    return render_template()
+ elif scelta=="3":
+    fig, ax = plt.subplots(figsize = (12,8))
+    
+    comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+    quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')    
+
+ 
 
     
 
