@@ -8,6 +8,8 @@ import pandas as pd
 import io
 import os
 import csv
+#Tempo
+import datetime
 from flask import Flask, render_template, request, Response, redirect, url_for
 app = Flask(__name__)
 matplotlib.use('Agg')
@@ -35,7 +37,7 @@ metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
 #a
 @app.route('/', methods=['GET'])
 def home():
-
+    
     return render_template('home.html')
 
 #_______________________________________________________________________
@@ -107,6 +109,7 @@ def login():
 #_______________________________________________________________________
 @app.route('/quartieri', methods=['GET'])
 def quartieriFunzione ():
+    
     return render_template('quartieriFunzione.html')
 
 
