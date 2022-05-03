@@ -126,7 +126,7 @@ def selezione():
  elif scelta=="3":
     return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="4":
-  return render_template()
+  return render_template()#postlogin
 
 @app.route('/visualizzaqt', methods=['GET'])
 def visualizzaqt():
@@ -177,9 +177,8 @@ def selezione2():
  elif scelta=="2":
     return render_template()
  elif scelta=="3":
-  return render_template("mappafinaleqt.html")
- elif scelta=="4":
-  return render_template()
+  return render_template("mappafinaleposte.html")
+ 
 
 @app.route('/mappaposte', methods=['GET'])
 def mappaposte():
