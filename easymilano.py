@@ -114,17 +114,16 @@ def quartieriFunzione ():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
- global lista_qt,scelta
- lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
+ global scelta
  scelta = request.args["radio"]
 
 
  if scelta=="1":
-    return render_template('scelta.html',quartieri=lista_qt)
+    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="2":
-    return render_template('scelta.html',quartieri=lista_qt)
+    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="3":
-    return render_template('scelta.html',quartieri=lista_qt)
+    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="4":
   return render_template()#postlogin
 
@@ -169,11 +168,11 @@ def posteFunzione():
 
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
- global lista_qt,scelta
- lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
+ global scelta
+ 
  scelta = request.args["scelta"]
  if scelta=="1":
-    return render_template("sceltaPosteAction.html",quartieri=lista_qt)
+    return render_template("sceltaPosteAction.html",quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="2":
     return render_template()
  elif scelta=="3":
@@ -224,11 +223,10 @@ def polizia():
 
 @app.route('/selezione3', methods=['GET'])
 def selezione3():
- global lista_qt,scelta
- lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
+ global scelta
  scelta = request.args["scelta"]
  if scelta=="1":
-    return render_template("sceltaPoliziaAction.html",quartieri=lista_qt)
+    return render_template("sceltaPoliziaAction.html",quartieri=quartieri.NIL.sort_values(ascending=True)))
  elif scelta=="2":
     return render_template()
  elif scelta=="3":
