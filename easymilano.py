@@ -21,7 +21,7 @@ mezzi_superficie = gpd.read_file('./static/file/tpl_percorsi.geojson')
 
 uffici_postali = gpd.read_file('./static/file/ds555_uffici_postali_milano_final.geojson')
 
-vie_milano = pd.read_csv('./static/file/vie_milano.csv')
+#vie_milano = 
 
 comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
 
