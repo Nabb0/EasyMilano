@@ -1,0 +1,16 @@
+pip install flask pandas geopandas matplotlib contextily 
+python -m pip install mysql-connector-python
+
+
+
+
+
+
+
+
+#merge utile per la verifica
+#converto entrambi in int64 dopo che dava errore, uno era string e l'altro int
+civici = civici.astype({"CODICE_VIA": int}, errors='raise') 
+stradario = stradario.astype({"CODICE_VIA": int}, errors='raise') 
+civici.drop('MUNICIPIO',inplace = True,axis = 1)
+vie_milano = pd.merge(civici, stradario, on='CODICE_VIA', how='inner').to_csv('static/file/vie_milano.csv',index=False)
