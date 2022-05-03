@@ -226,7 +226,7 @@ def selezione3():
  global scelta
  scelta = request.args["scelta"]
  if scelta=="1":
-    return render_template("sceltaPoliziaAction.html",quartieri=quartieri.NIL.sort_values(ascending=True)))
+    return render_template("sceltaPoliziaAction.html",quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="2":
     return render_template()
  elif scelta=="3":
