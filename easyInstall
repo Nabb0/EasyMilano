@@ -1,3 +1,0 @@
-pip install flask pandas geopandas matplotlib contextily 
-python -m pip install mysql-connector-python
-
