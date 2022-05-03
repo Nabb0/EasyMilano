@@ -171,7 +171,7 @@ def posteFunzione():
 def selezione2():
  global lista_qt,scelta
  lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
- scelta = request.args["radio"]
+ scelta = request.args["scelta"]
  if scelta=="1":
     return render_template("sceltaPosteAction.html",quartieri=lista_qt)
  elif scelta=="2":
@@ -183,15 +183,17 @@ def selezione2():
 @app.route('/mappaposte', methods=['GET'])
 def mappaposte():
     #poste in qt selto
+    
  if scelta=="1":
   NIL_utente = request.args["quartiere"]
+  quartiere=quartieri[quartieri.NIL.str.contains(NIL_utente)]
   uffici_postali_nil=uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
 
   #immagine
   fig, ax = plt.subplots(figsize = (12,8))
     
   uffici_postali_nil.to_crs(epsg=3857).plot(ax=ax,color  = 'r')
-  quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  quartiere.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
   contextily.add_basemap(ax=ax)
   output = io.BytesIO()
   FigureCanvas(fig).print_png(output)
@@ -203,7 +205,7 @@ def mappaposte():
     
     
     return render_template()
- else:
+ elif scelta=="3":
     fig, ax = plt.subplots(figsize = (12,8))
     
     uffici_postali.to_crs(epsg=3857).plot(ax=ax,color  = 'r')
