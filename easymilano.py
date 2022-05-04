@@ -135,9 +135,8 @@ def visualizzaqt():
  global quartiere
  nome_quartiere=request.args["quartiere"]
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
- quartiere2=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  if scelta=="3":
-    area = quartiere2.geometry.area/10**6
+    area = quartiere.geometry.area/10**6
     return render_template('Lunghezzaqt.html',area=area) 
  else:
   return render_template('mappafinaleqt.html') 
@@ -257,7 +256,7 @@ def mappapolizia():
   return Response(output.getvalue(), mimetype='image/png')    
 
 
-  return render_template("mappafinaleposte.html")
+  
  elif scelta=="2":
     
     
@@ -274,7 +273,7 @@ def mappapolizia():
 
 
 #_______________________________________________________________________
-#Scuole
+#Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622
 #_______________________________________________________________________
 
 @app.route('/scuole', methods=['GET'])
@@ -283,23 +282,65 @@ def SceltaGrado():
 
 @app.route('/Gradoselezionato', methods=['GET'])
 def Gradoselezionato():
- global scelta,Scuola
-
+ global Grado
+ Grado = request.args["grado"]
  
- Grado = request.args["Grado"]
- 
- if scelta=="Ctp":
-
-    return render_template()
+ if Grado=="Ctp":
+  return render_template("mappafinalescuole.html")
  elif scelta=="Istituto Istruzione Primario":
-    return render_template()
+    return render_template("mappafinalescuole.html")
  elif scelta=="Istituto Istruzione Secondario Primo grado":
-  return render_template()
+  return render_template("mappafinalescuole.html")
  elif scelta=="Scuola dell&#39;Infanzia":
-    return render_template()
+    return render_template("mappafinalescuole.html")
  
+
+@app.route('/mappascuole', methods=['GET'])
+def mappascuole():
+ print(Grado)
+ if  Grado=="Ctp":
+  
+  Grado_Della_scuola=scuole[scuole.Tipologia.str.contains(Grado)]
+  scuola_geo=scuole[scuole.Tipologia.str.contains(Grado_Della_scuola)]
+
+  #immagine
+  fig, ax = plt.subplots(figsize = (12,8))
     
- return render_template()
+  scuola_geo.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+  quartiere.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  contextily.add_basemap(ax=ax)
+  output = io.BytesIO()
+  FigureCanvas(fig).print_png(output)
+  return Response(output.getvalue(), mimetype='image/png')    
+
+
+  
+ elif scelta=="Istituto Istruzione Primario":
+    
+    
+    return render_template()
+ elif scelta=="3":
+    fig, ax = plt.subplots(figsize = (12,8))
+    
+    comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+    quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')    
+
+ elif scelta=="Istituto Istruzione Secondario Primo grado":
+    fig, ax = plt.subplots(figsize = (12,8))
+    
+    comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+    quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')  
+ elif scelta=="Scuola dell&#39;Infanzia":
+    
+  return render_template()
 
 
 
