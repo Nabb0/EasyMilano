@@ -235,11 +235,11 @@ def selezione3():
  elif scelta=="3":
   return render_template("mappafinalepolizia.html")
 
-#copia
+
 
 @app.route('/mappapolizia', methods=['GET'])
 def mappapolizia():
-    #poste in qt selto
+   
     
  if scelta=="1":
   NIL_utente = request.args["quartiere"]
@@ -271,6 +271,56 @@ def mappapolizia():
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')    
+
+
+#_______________________________________________________________________
+#Scuole
+#_______________________________________________________________________
+
+@app.route('/scuole', methods=['GET'])
+def SceltaGrado():
+    return render_template("SceltaGrado.html",gradi=sorted(list(scuole.Tipologia.drop_duplicates())))
+
+@app.route('/Gradoselezionato', methods=['GET'])
+def Gradoselezionato():
+ global scelta,Scuola
+
+ 
+ Grado = request.args["Grado"]
+ 
+ if scelta=="Ctp":
+
+    return render_template()
+ elif scelta=="Istituto Istruzione Primario":
+    return render_template()
+ elif scelta=="Istituto Istruzione Secondario Primo grado":
+  return render_template()
+ elif scelta=="Scuola dell&#39;Infanzia":
+    return render_template()
+ 
+    
+ return render_template()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
 

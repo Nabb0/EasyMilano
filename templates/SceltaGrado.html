@@ -1,0 +1,11 @@
+<form action="/Gradoselezionato" method = "GET">
+    <select name="grado" >
+        {% for grado in gradi %}
+        <option value="{{grado}}" >{{grado}}</option> 
+        {%endfor%}
+    </select>
+    <p><input type = "submit" value = "Submit" /></p>
+</form>
+
+
+
