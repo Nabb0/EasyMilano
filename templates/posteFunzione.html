@@ -1,51 +1,74 @@
 <head>
-    <link rel= "stylesheet" type= "text/css" href= "./static/css/style.css">
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/styleposte.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css" integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
-   <form action="/selezione2">
+<form action="/selezione2">
     <div class="main-container">
         <h2>seleziona la tipologia adatta alla tua ricerca: </h2>
         <div class="radio_button">
             <!-- primo radio button -->
             <label class="custom_radio">
-                <input type="radio" name="scelta" value="1">
+                <input type="radio" name="radio" value="1">
                 <span class="radio_btn"><i class="fas fa-check"></i></span>
                 <div class="opt-ricerca">
                     <i class="fa-solid fa-bicycle"></i>
-                        <h3>Inserisci un quartiere e visualizza le poste in quel quartiere</h3>
+                        <h3>insersci un quartiere <br>
+                            e visualizza le poste <br>
+                            in quel quartiere</h3>
                 </div>
             </label>
 
-            <!-- secondo radio button -->
-            <label class="custom_radio">
-                <input type="radio" name="scelta" value="2">
-                <span class="radio_btn"><i class="fas fa-check"></i></span>
-                <div class="opt-ricerca">
-                    <i class="fas fa-circle dashed"></i>
-                    <h3>insersci range in km</h3>
-                </div>
-            </label>
 
             <!-- terzo radio button -->
             <label class="custom_radio">
-                <input type="radio" name="scelta" value="3">
+                <input type="radio" name="radio" value="3">
                 <span class="radio_btn"><i class="fas fa-check"></i></span>
                 <div class="opt-ricerca">
                     <i class="fas fa mailbox"></i>
                     <h3>visualizza tutte le poste di milano</h3>
                 </div>
             </label>
-
-         
-            
-        </div> 
-        <p><input type = "submit" value = "Submit"></p> 
-    </div>
+                        
+                    </div> 
+                    <p><input type = "submit" value = "Submit"></p> 
+                </div>
 
 </form> 
+
+
+    <!-- secondo button deve mostrare un pop up che poi porterà alla mappa -->
+    <div class="center">
+        <input type="checkbox" id="show">
+        <label for="show" class="show-btn">View Form</label>
+        <div class="container">
+            <label for="show" class="close-btn fas fa-times" title="close"></label>
+            <div class="text">
+                SCEGLI IL RANGE DI CONTROLLO!
+            </div>
+            <form action="/mappaposte">
+                <div class="data">
+                    <label>SPOSTA IL CURSORE IN BASE ALLE TUE NECESSITA'</label>
+                    <input type="range" min= min_range max="181" value="20" class="slider" title="km" id="myRange" name="range">
+                    <p><span id="demo"></span> Km</p>
+                </div>
+                <div class="btn">
+                    <div class="inner"></div>
+                    <button type="submit" value="2" name="radio" >CONFERMA</button>
+                </div>
+            </form>
+        </div>
+        </div>
+                
+
+
+
+
+
+
+
 </body>
 

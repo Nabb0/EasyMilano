@@ -1,16 +1,21 @@
+
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+#importazioni necessarie per street map
+from shapely.geometry import Polygon, LineString, MultiPoint, MultiLineString, Point, MultiPolygon, shape
+import requests
 import contextily
 import geopandas as gpd
+from geopandas import points_from_xy
 import pandas as pd
 import io
 import os
 import csv
-#Tempo
 import datetime
 from flask import Flask, render_template, request, Response, redirect, url_for
+import json
 app = Flask(__name__)
 matplotlib.use('Agg')
 
@@ -30,9 +35,9 @@ comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati
 scuole = gpd.read_file('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv', epsg=3857)
 scuole_geometry = gpd.GeoDataFrame()
 #for _, r in scuole:
-for _, r in scuole:
+#for _, r in scuole:
 
-metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
+#metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
 
 
 
@@ -54,6 +59,16 @@ def home():
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    global point,pos,points
+    def get_place(via_input, citta="milano"):
+        via_input = '+'.join(via_input.lower().split())
+        place = requests.get(f"https://nominatim.openstreetmap.org/search?q={via_input},+{citta}&format=json&polygon=1&addressdetails=1").json()
+
+        if (len(place) != 0):
+            pos = {"lng": float(place[0]['lon']), "lat": float(place[0]['lat'])}
+            return pos
+        else:
+            return None
 
     global utente
 
@@ -66,16 +81,40 @@ def register():
         cpsw = request.form.get("cpwd")
         email = request.form.get("email")
         via = request.form.get("via")
-        civico = request.form.get('civico')
         
-        utente = [{"name": name,"surname":surname, "psw": psw,"email":email,"via":via,"civico":civico}]
-        
+        utente = [{"name": name,"surname":surname, "psw": psw,"email":email,"via":via}]
+
+        global point
+        res = get_place(via)
+        if res == None:
+            return "<h1>error</h1>"
+        else:
+            global point
+            point = gpd.GeoSeries([Point((res["lng"], res["lat"]))], crs='epsg:3857')
+        global points
+        points = gpd.GeoDataFrame(gpd.GeoSeries(point))
+        points = points.rename(columns={0:'geometry'}).set_geometry('geometry')
+
+        print(points)
+           # pointscuole = gpd.GeoSeries([Point((scuole["coorX"], scuole["CoorY"]))], crs='epsg:3857')
+
+
+        #controllo password
         if cpsw!= psw:
             return 'le password non corrispondono'
         else:
             dati_append = dati.append(utente,ignore_index=True)
             dati_append.to_csv('./static/file/dati.csv',index=False)
-            return render_template('login.html', name = name, surname = surname, psw = psw , via = via,utente = utente, email = email, civico = civico)
+            return render_template('login.html', name = name, surname = surname, psw = psw , via = via,utente = utente, email = email)
+
+
+
+
+#test
+
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    return points.to_html()
 #_______________________________________________________________________
 
 
@@ -88,7 +127,7 @@ def register():
 def login():
 
     #dichiarazione di df. legge il file json creato per preservare i dati degli utenti
-
+        #login sistemato---
         # ciclo for di controllo alternativo
         if request.method == 'GET':
             return render_template('login.html')
@@ -97,11 +136,12 @@ def login():
             email = request.form.get("email")
             print(psw, email)
 
-            for _, r in dati.iterrows():
-                if email == r["email"] and psw == r["psw"]:  
-                    return '<h1>Login</h1>'
+        for _, r in dati.iterrows():
+            if email == r['email'] and psw == r['psw']:  
+                return '<h1>login effettuato </h1>'
 
-            return '<h1>Errore</h1>'
+        return '<h1>Errore</h1>'
+
 
 
 #_______________________________________________________________________
@@ -121,18 +161,20 @@ def quartieriFunzione ():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
- global scelta
+ global lista_qt,scelta
+ lista_qt= quartieri.NIL.to_list() # DEVO PER FORZA TRASFORMARE IN LISTA
  scelta = request.args["radio"]
 
 
  if scelta=="1":
-    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
+    return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="2":
-    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
+    return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="3":
-    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
+    return render_template('scelta.html',quartieri=lista_qt)
  elif scelta=="4":
-  return render_template()#postlogin
+  return render_template('mappafinaleqt.html',quartieri=lista_qt)
+
 
 @app.route('/visualizzaqt', methods=['GET'])
 def visualizzaqt():
@@ -141,10 +183,13 @@ def visualizzaqt():
  quartiere=quartieri[quartieri.NIL.str.contains(nome_quartiere)]
  if scelta=="3":
     area = quartiere.geometry.area/10**6
-    return render_template('Lunghezzaqt.html',area=area) 
+    return render_template('Lunghezzaqt.html',area=area)
+ elif scelta =="4":
+    tuoquart = quartieri[quartieri.within(points.gemetry.squeeze())]
+    return render_template('mappafinaleqt.html', tuoquart = tuoquart)
  else:
   return render_template('mappafinaleqt.html') 
- 
+
 
 
 @app.route('/mappa', methods=['GET'])
@@ -155,7 +200,19 @@ def mappa():
     contextily.add_basemap(ax=ax)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')    
+    return Response(output.getvalue(), mimetype='image/png')
+
+
+ elif scelta =='4':
+    fig, ax = plt.subplots(figsize = (12,8))
+    points.to_crs(epsg=3857).plot(ax=ax,color='r')
+    quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5,edgecolor='k')
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+
  else:
     fig, ax = plt.subplots(figsize = (12,8))
     QtConfinanati=quartieri[quartieri.touches(quartiere.geometry.squeeze())]
@@ -180,7 +237,7 @@ def selezione2():
  if scelta=="1":
     return render_template("sceltaPosteAction.html",quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="2":
-    return render_template()
+    return render_template("posteFunzione.html")
  elif scelta=="3":
   return render_template("mappafinaleposte.html")
  
@@ -188,7 +245,7 @@ def selezione2():
 @app.route('/mappaposte', methods=['GET'])
 def mappaposte():
     #poste in qt selto
-    
+ scelta = request.args["radio"]
  if scelta=="1":
   NIL_utente = request.args["quartiere"]
   quartiere=quartieri[quartieri.NIL.str.contains(NIL_utente)]
@@ -207,9 +264,20 @@ def mappaposte():
 
   return render_template("mappafinaleposte.html")
  elif scelta=="2":
-    
-    
-    return render_template()
+    range = request.args['range']
+    range2 = int(range)
+    print(range2)
+    myrange_poste = uffici_postali[uffici_postali.distance(points.unary_union)<=range2]
+    #immagine
+    fig, ax = plt.subplots(figsize = (12,8))
+    points.to_crs(epsg=3857).plot(ax=ax,color  = 'r')
+    myrange_poste.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+    contextily.add_basemap(ax=ax)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')   
+
+
  elif scelta=="3":
     fig, ax = plt.subplots(figsize = (12,8))
     
