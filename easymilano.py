@@ -27,7 +27,9 @@ uffici_postali = gpd.read_file('./static/file/ds555_uffici_postali_milano_final.
 
 comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
 
-scuole = pd.read_csv('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv')
+scuole = gpd.read_file('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv', epsg=3857)
+scuole_geometry = gpd.GeoDataFrame()
+#for _, r in scuole:
 metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
 
 
@@ -301,13 +303,13 @@ def mappascuole():
  if  Grado=="Ctp":
   
   Grado_Della_scuola=scuole[scuole.Tipologia.str.contains(Grado)]
-  scuola_geo=scuole[scuole.Tipologia.str.contains(Grado_Della_scuola)]
+  scuola_geo=scuole[scuole["Tipologia"] == Grado_Della_scuola]
 
   #immagine
   fig, ax = plt.subplots(figsize = (12,8))
     
   scuola_geo.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
-  quartiere.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
   contextily.add_basemap(ax=ax)
   output = io.BytesIO()
   FigureCanvas(fig).print_png(output)
@@ -316,29 +318,61 @@ def mappascuole():
 
   
  elif scelta=="Istituto Istruzione Primario":
+  Grado_Della_scuola=scuole[scuole.Tipologia.str.contains(Grado)]
+  scuola_geo=scuole[scuole["Tipologia"] == Grado_Della_scuola]
+
+  #immagine
+  fig, ax = plt.subplots(figsize = (12,8))
     
-    
-    return render_template()
+  scuola_geo.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+  quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  contextily.add_basemap(ax=ax)
+  output = io.BytesIO()
+  FigureCanvas(fig).print_png(output)
+  return Response(output.getvalue(), mimetype='image/png')    
+  return render_template()
  elif scelta=="3":
-    fig, ax = plt.subplots(figsize = (12,8))
+   Grado_Della_scuola=scuole[scuole.Tipologia.str.contains(Grado)]
+   scuola_geo=scuole[scuole["Tipologia"] == Grado_Della_scuola]
+
+  #immagine 
+   fig, ax = plt.subplots(figsize = (12,8))
     
-    comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
-    quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
-    contextily.add_basemap(ax=ax)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')    
+   scuola_geo.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+   quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+   contextily.add_basemap(ax=ax)
+   output = io.BytesIO()
+   FigureCanvas(fig).print_png(output)
+   return Response(output.getvalue(), mimetype='image/png')    
 
  elif scelta=="Istituto Istruzione Secondario Primo grado":
-    fig, ax = plt.subplots(figsize = (12,8))
+  Grado_Della_scuola=scuole[scuole.Tipologia.str.contains(Grado)]
+  scuola_geo=scuole[scuole["Tipologia"] == Grado_Della_scuola]
+
+  #immagine
+  fig, ax = plt.subplots(figsize = (12,8))
     
-    comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
-    quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
-    contextily.add_basemap(ax=ax)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')  
+  scuola_geo.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+  quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  contextily.add_basemap(ax=ax)
+  output = io.BytesIO()
+  FigureCanvas(fig).print_png(output)
+  return Response(output.getvalue(), mimetype='image/png')    
+
  elif scelta=="Scuola dell&#39;Infanzia":
+  Grado_Della_scuola=scuole[scuole.Tipologia.str.contains(Grado)]
+  scuola_geo=scuole[scuole["Tipologia"] == Grado_Della_scuola]
+
+  #immagine
+  fig, ax = plt.subplots(figsize = (12,8))
+    
+  scuola_geo.to_crs(epsg=3857).plot(ax=ax,color  = 'k')
+  quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+  contextily.add_basemap(ax=ax)
+  output = io.BytesIO()
+  FigureCanvas(fig).print_png(output)
+  return Response(output.getvalue(), mimetype='image/png')    
+
     
   return render_template()
 
