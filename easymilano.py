@@ -30,6 +30,8 @@ comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati
 scuole = gpd.read_file('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv', epsg=3857)
 scuole_geometry = gpd.GeoDataFrame()
 #for _, r in scuole:
+for _, r in scuole:
+
 metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
 
 
