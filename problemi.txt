@@ -1,9 +1,7 @@
 Quartieri
-visualizza il quartiere in cui trovi non va 
+visualizza il quartiere in cui trovi non va (ghebrous)
 
-poste tutto
-erkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
-KeyError: 'scelta'
+
 
 
 polizia 

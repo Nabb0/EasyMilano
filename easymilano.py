@@ -233,7 +233,8 @@ def posteFunzione():
 def selezione2():
  global scelta
  
- scelta = request.args["scelta"]
+ scelta = request.args["radio"]
+ 
  if scelta=="1":
     return render_template("sceltaPosteAction.html",quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="2":
@@ -245,7 +246,8 @@ def selezione2():
 @app.route('/mappaposte', methods=['GET'])
 def mappaposte():
     #poste in qt selto
- scelta = request.args["radio"]
+ 
+ 
  if scelta=="1":
   NIL_utente = request.args["quartiere"]
   quartiere=quartieri[quartieri.NIL.str.contains(NIL_utente)]
