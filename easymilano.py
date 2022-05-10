@@ -167,11 +167,11 @@ def selezione():
 
 
  if scelta=="1":
-    return render_template('scelta.html',quartieri=lista_qt)
+    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="2":
-    return render_template('scelta.html',quartieri=lista_qt)
+    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="3":
-    return render_template('scelta.html',quartieri=lista_qt)
+    return render_template('scelta.html',quartieri=quartieri.NIL.sort_values(ascending=True))
  elif scelta=="4":
   return render_template('mappafinaleqt.html',quartieri=lista_qt)
 
