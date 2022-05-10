@@ -379,10 +379,10 @@ def mappascuole():
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        scuola_geo.set_crs(epsg=4236).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
-        quartieri.to_crs(epsg=4236).plot(ax=ax, alpha=0.5)
-        contextily.add_basemap(ax=ax, crs=4236)
+        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
+        contextily.add_basemap(ax=ax, crs=3857)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
@@ -396,10 +396,10 @@ def mappascuole():
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        scuola_geo.set_crs(epsg=4236).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
-        quartieri.to_crs(epsg=4236).plot(ax=ax, alpha=0.5)
-        contextily.add_basemap(ax=ax, crs=4236)
+        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
+        contextily.add_basemap(ax=ax, crs=3857)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
@@ -413,10 +413,10 @@ def mappascuole():
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        scuola_geo.set_crs(epsg=4236).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
-        quartieri.to_crs(epsg=4236).plot(ax=ax, alpha=0.5)
-        contextily.add_basemap(ax=ax, crs=4236)
+        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
+        contextily.add_basemap(ax=ax, crs=3857)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
@@ -431,10 +431,10 @@ def mappascuole():
         fig, ax = plt.subplots(figsize=(12, 8))
 
 
-        scuola_geo.set_crs(epsg=4236).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
-        quartieri.to_crs(epsg=4236).plot(ax=ax, alpha= 0.5)
-        contextily.add_basemap(ax=ax, crs=4236)
+        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+        contextily.add_basemap(ax=ax, crs=3857)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
