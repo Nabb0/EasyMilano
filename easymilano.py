@@ -365,6 +365,8 @@ def Gradoselezionato():
         return render_template("mappafinalescuole.html")
     elif Grado == "Scuola dell Infanzia":
         return render_template("mappafinalescuole.html")
+    elif Grado == "Istituto Istruzione Secondario Secondo grado":
+        return render_template("mappafinalescuole.html")
 
 
 @app.route('/mappascuole', methods=['GET'])
@@ -379,7 +381,7 @@ def mappascuole():
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=4236).to_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
         quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
         contextily.add_basemap(ax=ax, crs=3857)
@@ -396,7 +398,7 @@ def mappascuole():
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=4236).to_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
         quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
         contextily.add_basemap(ax=ax, crs=3857)
@@ -408,12 +410,29 @@ def mappascuole():
         scuola_geo = scuole[scuole["Tipologia"] == Grado]
         print(scuola_geo.crs)
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
-            scuola_geo["coorX"], scuola_geo["coorY"]))
+         scuola_geo["coorX"], scuola_geo["coorY"]))
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=4236).to_crs(epsg=3857).plot(ax=ax, color='r')
+        print(scuola_geo)
+        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
+        contextily.add_basemap(ax=ax, crs=3857)
+        output = io.BytesIO()
+        FigureCanvas(fig).print_png(output)
+        return Response(output.getvalue(), mimetype='image/png')
+    
+    elif Grado == "Istituto Istruzione Secondario Secondo grado":
+        scuola_geo = scuole[scuole["Tipologia"] == Grado]
+        print(scuola_geo.crs)
+        scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
+         scuola_geo["coorX"], scuola_geo["coorY"]))
+
+        # immagine
+        fig, ax = plt.subplots(figsize=(12, 8))
+
+        scuola_geo.set_crs(epsg=4236).to_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
         quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
         contextily.add_basemap(ax=ax, crs=3857)
@@ -421,24 +440,23 @@ def mappascuole():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
 
+
     elif Grado == "Scuola dell Infanzia":
-        scuola_geo = scuole[scuole["Tipologia"] == "Scuola dell'Infanzia"]
+        scuola_geo = scuole[scuole["Tipologia"] ==  "Scuola dell'Infanzia"]
         print(scuola_geo.crs)
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
-            scuola_geo["coorX"], scuola_geo["coorY"]))
+         scuola_geo["coorX"], scuola_geo["coorY"]))
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
 
-
-        scuola_geo.set_crs(epsg=3857).plot(ax=ax, color='r')
+        scuola_geo.set_crs(epsg=4236).to_crs(epsg=3857).plot(ax=ax, color='r')
         print(scuola_geo)
-        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha= 0.5)
+        quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
         contextily.add_basemap(ax=ax, crs=3857)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)
