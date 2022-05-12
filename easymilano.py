@@ -345,6 +345,7 @@ def mappapolizia():
 
 # _______________________________________________________________________
 # Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622
+# https://github.com/Nabb0/Python-appunti-ed-esercizi/blob/main/esercizi/Geopandas/Riva_es6.ipynb
 # _______________________________________________________________________
 
 @app.route('/scuole', methods=['GET'])
@@ -373,6 +374,7 @@ def Gradoselezionato():
 def mappascuole():
     print(Grado)
     if Grado == "Ctp":
+        #milano=quartieri[quartieri.intersects(quartieri.unary_union)]
         scuola_geo = scuole[scuole["Tipologia"] == Grado]
         print(scuola_geo.crs)
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(

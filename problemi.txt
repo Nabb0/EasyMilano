@@ -8,8 +8,7 @@ polizia
 non va range(range no va ,non carica la mappa / se lascio visibile il punto della via, mostra il punto in un'altra parte in mezzo all'oceano.)
 
 scuole 
-non fa vedere le scuole 
-non fa vedere i punti delle scuole errore unlishead list
+non far vedere le scuole fuori da milano
 
 
 
