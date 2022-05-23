@@ -8,15 +8,7 @@ from unittest import skip
 from xmlrpc.client import boolean
 from numpy import empty, place
 import shapely
-from shapely.geometry import Point,Polygon,mapping 
-
-app = Flask(__name__)
-
-
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-
+import turtle
 from turtle import color, pos
 import pyproj
 from pyproj import CRS
@@ -33,13 +25,18 @@ from shapely.geometry import Polygon, LineString, MultiPoint, MultiLineString, P
 import requests
 import contextily
 import geopandas as gpd
-from geopandas import points_from_xy
 import pandas as pd
 import io
 
 from functools import partial
-import pyproj
 from shapely.ops import transform
+app = Flask(__name__)
+
+
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
 
 
 # Dichiarazioni dei geodataframe
