@@ -16,7 +16,7 @@ header{
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 10px;
+    padding: 5px 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -49,8 +49,8 @@ header li a:hover.active
     border-radius: 20px;
 }
 header li a img{
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
 }
 section{
     position: relative;
@@ -134,8 +134,6 @@ section img#blu{
     font-size: 2em;
     color: #fff;
     float:initial;
-
-
 }
 .container{
     text-align: center;
@@ -173,4 +171,91 @@ section img#blu{
     height: 100px;
     background: linear-gradient(to top,rgb(39, 47, 153),transparent);
     z-index: 1000;
+}
+
+
+          /* register e login */
+
+.form-box{
+    width: 660px;
+    height: 800px;
+    position: relative;
+    margin: 6% auto;
+    background: #fff;
+    padding: 5px;
+    display:flex;
+    justify-content: center; 
+}
+.button-box{
+    width: 220px;
+    height: 50%;
+    margin: 35px auto;
+    position:absolute;
+    border-radius: 25%;
+}
+.toggle-btn{
+    padding: 10px 30px;
+    align-self: center;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: relative;
+}
+.toggle-btn h1{
+    top: -145;
+    left: -30%;
+    position: relative;
+    width: 400px;
+    height: 20%;
+    text-align: center;
+    font-size: 2em;
+    color: rgb(255, 255, 255);
+}
+#btn2{
+    top: -80;
+    left: -40%;
+    position: relative;
+    width: 400px;
+    height: 20%;
+    align-items: center;
+
+    float:initial;
+    background: linear-gradient(to right,#ff105f,#ffad06);
+    border-radius: 30px;
+}
+
+
+.input{
+    top: 180px;
+    position: absolute;
+    width: 280px;
+    text-align: center;
+
+}
+.input-field{
+    width: 100%;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-left:0 ;
+    border-right:0 ;
+    border-top:0 ;
+    border: bottom 1 solid #999;
+    outline: none;
+    background: transparent;
+
+}
+.submit-btn{
+    width: 85%;
+    padding: 10% 25%;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: linear-gradient(to right,#ff105f,#ffad06);
+    border: 0;
+    border: none;
+    border-radius: 30px;
+}
+.link{
+    padding: 30% 1%;
 }

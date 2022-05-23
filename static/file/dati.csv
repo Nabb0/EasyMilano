@@ -1,10 +1,4 @@
-name,surname,psw,email,via,civico
-a,a,m,ghebrousdavide@gmail.com,a,a
-a,a,m,ghebrousdavide@gmail.com,a,a
-a,a,a,a@gmail.com,a,a
-aa,a,a,a@gmail.com,a,a
-mario,rossi,mario.rossi,mario.rossi@gmail.com,mario,1
-mario,rossi,mario.rossi,mario.rossi@gmail.com,mario,1
-mario,rossi,mario.rossi,mario.rossi@gmail.com,mario,1
-a,a,a,a@gmail.com,"Via Pace, 9",
-a,a,a,a@gmail.com,"Via Pace, 9",
+name,surname,psw,email,lng,lat,geometry
+a,a,a,a@gmail.com,9.2030334,45.4592529,POINT (9.2030334 45.4592529)
+j,j,jj,j@gmail.com,9.1873816,45.4993017,POINT (9.1873816 45.4993017)
+p,p,ppp,pp@gmail.com,9.188527786082506,45.4992999,POINT (9.188527786082506 45.4992999)

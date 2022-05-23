@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-
-    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="./static/css/style.css">
 </head>
 <body>
-        <form action="/login" method="POST">
+    <div class="hero">
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn2"></div>
+                <button type="button" class="toggle-btn"><h1>LOGIN</h1></button>
+            </div>
+            <form class="input"action="/login" method="POST">
+                <p>Email<input type="email" name="email" pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" placeholder="email" size="30"  class="input-field" required></p>
+                <p>Password <input type = "password" name ="pwd" class="input-field" required/></p>
+                <p><input type = "submit" class='submit-btn' value = "CONFERMA"/></p>
+                <div class="link">
+                <p>Prima volta? Effettua la <a href="/register">registrazione!</a>!</p>
+                </div>
+            </form>
+        </div>
+    
 
-            <p>Email<input type="email" name="email" pattern=".+@gmail\.com" placeholder="email" size="30" required></p>
-            <p>Password <input type = "password" name ="pwd" required/></p>
-            <p><input type = "submit" value = "Submit"/></p>
-            <p>Prima volta? Effettua la <a href="/register">registrazione!</a>!</p>
-        </form>
+    </div>
 </body>
-</html>

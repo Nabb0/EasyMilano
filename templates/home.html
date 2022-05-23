@@ -11,7 +11,11 @@
     <a href="/" class="logo">
       <img src="./static/images/images home/easy milano completo.png" alt="compact_logo">
     </a>
+    {% if boolean_user == False %}
     <li><a href="/register" class="active"><img src="static/images/images route/register.png" alt=""></a></li>
+    {% else %}
+    <li><a href="/logout" class="active"><img src="static\images\images route\logout.png" alt=""></a></li>
+    {% endif %}
   </header>
 
 

@@ -1,10 +1,60 @@
-<form action="/selezione">
 
-    <input type="radio" name="radio" value="1">visualizza un quartiere<br>
-    <input type="radio" name="radio" value="2">visualizza i quartieri limitrofi di un quartiere scelto <br>
-    <input type="radio" name="radio" value="3">visualizza l area di quartiere<br>
-    <input type="radio" name="radio" value="4">visualizza il quartiere in cui ti trovi<br>
-    
-    <p><input type = "submit" value = "Submit"></p>
-    
-    </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/styleposte.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="radio_button">
+            <form action="/selezione">
+                            <!-- primo radio button -->
+                <label class="custom_radio">
+                    <input type="radio" name="radio" value="1"><br>
+                    <span class="radio_btn"><i class="fas fa-check"></i></span>
+                    <div class="opt-ricerca">
+                        <i class="fas fa mailbox"></i>
+                        <h3>visualizza un quartiere</h3>
+                    </div>
+                </label>
+                                <!-- secondo radio button -->
+                <label class="custom_radio">
+                    <input type="radio" name="radio" value="2"><br>
+                    <span class="radio_btn"><i class="fas fa-check"></i></span>
+                    <div class="opt-ricerca">
+                        <i class="fas fa mailbox"></i>
+                        <h3>visualizza i quartieri limitrofi di un quartiere scelto </h3>
+                    </div>
+                </label>
+                
+                    <!-- terzo radio button -->
+                <label class="custom_radio">
+                    <input type="radio" name="radio" value="4"><br>
+                    <span class="radio_btn"><i class="fas fa-check"></i></span>
+                    <div class="opt-ricerca">
+                        <i class="fas fa mailbox"></i>
+                        <h3>visualizza il quartiere in cui ti rovi</h3>
+                    </div>
+                </label>
+
+                
+                    <!-- quarto radio button -->
+                <label class="custom_radio">
+                    <input type="radio" name="radio" value="1">visualizza un quartiere<br>
+                    <span class="radio_btn"><i class="fas fa-check"></i></span>
+                    <div class="opt-ricerca">
+                        <i class="fas fa mailbox"></i>
+                        <h3>visualizza tutte le poste di milano</h3>
+                    </div>
+                </label>
+                
+                
+                
+                
+                <p><input type = "submit" value = "Submit"></p>
+                
+            </form>
+        </div>
+    </div>
+</body>
+</html>

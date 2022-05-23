@@ -1,9 +1,34 @@
 
+from flask import Flask, render_template, request, Response, redirect, url_for, make_response, session 
+from flask_session import Session
+from ctypes.wintypes import POINT
+import json
+from re import S
+from unittest import skip
+from xmlrpc.client import boolean
+from numpy import empty, place
+import shapely
+from shapely.geometry import Point,Polygon,mapping 
+
+app = Flask(__name__)
+
+
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
+from turtle import color, pos
+import pyproj
+from pyproj import CRS
 import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-# importazioni necessarie per street map
+matplotlib.use('Agg')
+
+
+#importazioni necessarie per street map
 from shapely.geometry import Polygon, LineString, MultiPoint, MultiLineString, Point, MultiPolygon, shape
 import requests
 import contextily
@@ -11,16 +36,14 @@ import geopandas as gpd
 from geopandas import points_from_xy
 import pandas as pd
 import io
-import os
-import csv
-import datetime
-from flask import Flask, render_template, request, Response, redirect, url_for
-import json
-app = Flask(__name__)
-matplotlib.use('Agg')
+
+from functools import partial
+import pyproj
+from shapely.ops import transform
+
 
 # Dichiarazioni dei geodataframe
-dati = pd.read_csv("./static/file/dati.csv")
+dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
 
 quartieri = gpd.read_file(
     './static/file/ds964_nil_wm-20220405T093028Z-001.zip')
@@ -38,6 +61,10 @@ comandi_polizialocale = gpd.read_file(
 scuole = gpd.read_file(
     './static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv', epsg=3857)
 scuole_geometry = gpd.GeoDataFrame()
+
+reg_logout = "./static/images/images route/register.png"
+
+boolean_user = bool(False)
 # for _, r in scuole:
 # for _, r in scuole:
 
@@ -60,59 +87,46 @@ def home():
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    global point, pos, points
+    global point,pos,points, place, via, boolean_user,utente, dati
 
     def get_place(via_input, citta="milano"):
         via_input = '+'.join(via_input.lower().split())
-        place = requests.get(
-            f"https://nominatim.openstreetmap.org/search?q={via_input},+{citta}&format=json&polygon=1&addressdetails=1").json()
-
+        place = requests.get(f"https://nominatim.openstreetmap.org/search?q={via_input},+{citta},+milano&format=json&polygon=1&addressdetails=1").json()
         if (len(place) != 0):
-            pos = {"lng": float(place[0]['lon']),
-                   "lat": float(place[0]['lat'])}
+            pos = {"lng": float(place[0]['lon']), "lat": float(place[0]['lat'])}
+            #print(pos)
             return pos
         else:
             return None
 
-    global utente
-
     if request.method == 'GET':
-        return render_template('register.html')
+        return render_template('register.html', pos = pos, boolean_user = boolean_user)
     else:
+        global utente
         name = request.form.get("name")
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
         cpsw = request.form.get("cpwd")
         email = request.form.get("email")
-        via = request.form.get("via")
-
-        utente = [{"name": name, "surname": surname,
-                   "psw": psw, "email": email, "via": via}]
-
-        global point
-        res = get_place(via)
-        if res == None:
-            return "<h1>error</h1>"
-        else:
-            global point
-            point = gpd.GeoSeries(
-                [Point((res["lng"], res["lat"]))], crs='epsg:3857')
-        global points
-        points = gpd.GeoDataFrame(gpd.GeoSeries(point))
-        points = points.rename(
-            columns={0: 'geometry'}).set_geometry('geometry')
-
-        print(points)
-        # pointscuole = gpd.GeoSeries([Point((scuole["coorX"], scuole["CoorY"]))], crs='epsg:3857')
-
-        # controllo password
-        if cpsw != psw:
+        #controllo password
+        if cpsw!= psw:
             return 'le password non corrispondono'
         else:
-            dati_append = dati.append(utente, ignore_index=True)
-            dati_append.to_csv('./static/file/dati.csv', index=False)
-            return render_template('login.html', name=name, surname=surname, psw=psw, via=via, utente=utente, email=email)
+            global lng, lat
+            lng = get_place(request.form.get("via"))['lng']
+            lat = get_place(request.form.get("via"))['lat'] # prende lat e la porta nella funzione get_place, diventa via_input essendo il primo qualcosa
+            print(lng)
+            print(lat)
+            tupla_point = (lng,lat)
+            #print(tupla_point)
+            points = Point(tupla_point[0], tupla_point[1])
+            
+            print(points)
+            utente = [{"name": name,"surname":surname, "psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points}]
+            dati = dati.append(utente,ignore_index=True)
+            dati.to_csv('./static/file/dati.csv',index=False)
 
+            return redirect(url_for('login'))
 
 # test
 
@@ -127,24 +141,44 @@ def test():
 # _______________________________________________________________________
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
-    # dichiarazione di df. legge il file json creato per preservare i dati degli utenti
-    # login sistemato---
-    # ciclo for di controllo alternativo
+    global tupla_point,user
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        psw = request.form.get("pwd")
-        email = request.form.get("email")
-        print(psw, email)
+        l_psw = request.form.get("pwd")
+        l_email = request.form.get("email")
+        
+        user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
 
-    for _, r in dati.iterrows():
-        if email == r['email'] and psw == r['psw']:
-            return '<h1>login effettuato </h1>'
+        if user is not None :
+            session['email'] = user['email']
+            session['psw'] = user['psw']
+            session['lng'] = dati[dati["email"] == l_email]["lng"]
+            session['lat'] = dati[dati["email"] == l_email]["lat"]
+            session['geometry'] = dati[dati["email"] == l_email]["geometry"]
+            boolean_user = bool(True)
+            print(session['geometry'])
+            print(session['psw'])
+            print(session['lng'])
+            print(session['lat'])
+            print(boolean_user)
+            return render_template('home.html', boolean_user = True)
+        else: 
+            '<h1>Utente insesistente, riprova.</h1>'
 
-    return '<h1>Errore</h1>'
 
-
+@app.route("/logout")
+def logout():
+    session['email'] = None
+    session['psw'] = None
+    session['lng'] = None
+    session['lat'] = None
+    session['geometry'] = None
+    print(session['email'])
+    print(session['psw'])
+    print(session['lat'])
+    print(session['lng'])
+    return redirect(url_for('home'))
 # _______________________________________________________________________
 
 
@@ -263,20 +297,40 @@ def mappaposte():
         return Response(output.getvalue(), mimetype='image/png')
 
         return render_template("mappafinaleposte.html")
-    elif scelta == "2":
+    elif scelta=="2":
         range = request.args['range']
-        range2 = int(range)
-        print(range2)
-        myrange_poste = uffici_postali[uffici_postali.distance(
-            points.unary_union) <= range2]
-        # immagine
-        fig, ax = plt.subplots(figsize=(12, 8))
-        points.to_crs(epsg=3857).plot(ax=ax, color='r')
-        myrange_poste.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
+        range_int= int(range)
+        print(range_int)
+
+        #____________________     
+        # s.values[n]           |
+        # s.to_list()[n]        |<------------------vari modi per prendere il valore numerico di una series
+        # s.to_numpy()[n]      | 
+        # list(s)[n]          |
+        #____________________
+
+
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        print(lng)
+        print(lat)
+
+
+        fig, ax = plt.subplots(figsize = (12,8))
+        point = Point(lng.values[0],lat.values[0])
+        gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
+        dist = uffici_postali.to_crs('EPSG:5234').distance(point)
+        print(dist)
+        poste_range = uffici_postali[uffici_postali.distance(point)<=range_int/1000]
+        print(poste_range)
+        poste_range.to_crs('EPSG:3857').plot(ax = ax)
         contextily.add_basemap(ax=ax)
+        ax.set_axis_off()
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return Response(output.getvalue(), mimetype='image/png')
+        return Response(output.getvalue(), mimetype='image/png')  
 
     elif scelta == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
