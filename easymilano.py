@@ -8,8 +8,8 @@ from unittest import skip
 from xmlrpc.client import boolean
 from numpy import empty, place
 import shapely
-import turtle
-from turtle import color, pos
+# import turtle
+# from turtle import color, pos
 import pyproj
 from pyproj import CRS
 import matplotlib.pyplot as plt
@@ -21,22 +21,27 @@ matplotlib.use('Agg')
 
 
 #importazioni necessarie per street map
-from shapely.geometry import Polygon, LineString, MultiPoint, MultiLineString, Point, MultiPolygon, shape
-import requests
-import contextily
-import geopandas as gpd
-import pandas as pd
-import io
 
-from functools import partial
-from shapely.ops import transform
+
+
 app = Flask(__name__)
-
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
+from shapely.geometry import Polygon, LineString, MultiPoint, MultiLineString, Point, MultiPolygon, shape
+import requests
+import contextily
+import geopandas as gpd
+from geopandas import points_from_xy
+import pandas as pd
+import io
+
+from functools import partial
+import pyproj
+from shapely.ops import transform
 
 
 # Dichiarazioni dei geodataframe
@@ -73,8 +78,8 @@ boolean_user = bool(False)
 # a
 @app.route('/', methods=['GET'])
 def home():
-
-    return render_template('home.html')
+    
+    return render_template('home.html', boolean_user = False)
 
 # _______________________________________________________________________
 
@@ -90,14 +95,14 @@ def register():
         via_input = '+'.join(via_input.lower().split())
         place = requests.get(f"https://nominatim.openstreetmap.org/search?q={via_input},+{citta},+milano&format=json&polygon=1&addressdetails=1").json()
         if (len(place) != 0):
-            pos = {"lng": float(place[0]['lon']), "lat": float(place[0]['lat'])}
+            post = {"lng": float(place[0]['lon']), "lat": float(place[0]['lat'])}
             #print(pos)
-            return pos
+            return post
         else:
             return None
 
     if request.method == 'GET':
-        return render_template('register.html', pos = pos, boolean_user = boolean_user)
+        return render_template('register.html', boolean_user = boolean_user)
     else:
         global utente
         name = request.form.get("name")
@@ -105,7 +110,6 @@ def register():
         psw = request.form.get("pwd")
         cpsw = request.form.get("cpwd")
         email = request.form.get("email")
-        #controllo password
         if cpsw!= psw:
             return 'le password non corrispondono'
         else:
@@ -214,7 +218,13 @@ def visualizzaqt():
         area = quartiere.geometry.area/10**6
         return render_template('Lunghezzaqt.html', area=area)
     elif scelta == "4":
-        tuoquart = quartieri[quartieri.within(points.gemetry.squeeze())]
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        point = Point(lng.values[0],lat.values[0])
+        yourpoint = gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857')
+        tuoquart = quartieri[quartieri.within(yourpoint.gemetry.squeeze())]
         return render_template('mappafinaleqt.html', tuoquart=tuoquart)
     else:
         return render_template('mappafinaleqt.html')
@@ -232,8 +242,8 @@ def mappa():
 
     elif scelta == '4':
         fig, ax = plt.subplots(figsize=(12, 8))
-        points.to_crs(epsg=3857).plot(ax=ax, color='r')
-        quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
+        yourpoint.to_crs(epsg=3857).plot(ax=ax, color='r')
+        tuoquart.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
@@ -266,17 +276,17 @@ def selezione2():
     scelta = request.args["radio"]
 
     if scelta == "1":
-        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True))
+        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),scelta = 1)
     elif scelta == "2":
-        return render_template("posteFunzione.html")
+        return render_template("posteFunzione.html",scelta = 2)
     elif scelta == "3":
-        return render_template("mappafinaleposte.html")
+        return render_template("mappafinaleposte.html",scelta = 3)
 
 
 @app.route('/mappaposte', methods=['GET'])
 def mappaposte():
     # poste in qt selto
-
+    scelta = request.args["radio"]
     if scelta == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
@@ -305,7 +315,6 @@ def mappaposte():
         # s.to_numpy()[n]      | 
         # list(s)[n]          |
         #____________________
-
 
         lng = session['lng'].values[0]
         lat = session['lat'].values[0]
