@@ -150,7 +150,7 @@ def login():
         l_email = request.form.get("email")
         
         user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
-
+        scuole_in = scuole[scuole.contains(scuole)]
         if user is not None :
             session['email'] = user['email']
             session['psw'] = user['psw']
@@ -206,7 +206,12 @@ def selezione():
     elif scelta == "3":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif scelta == "4":
-        return render_template('mappafinaleqt.html', quartieri=lista_qt)
+        global lng,lat
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        return render_template('mappafinaleqt.html')
 
 
 @app.route('/visualizzaqt', methods=['GET'])
@@ -217,15 +222,6 @@ def visualizzaqt():
     if scelta == "3":
         area = quartiere.geometry.area/10**6
         return render_template('Lunghezzaqt.html', area=area)
-    elif scelta == "4":
-        lng = session['lng'].values[0]
-        lat = session['lat'].values[0]
-        lng = gpd.GeoSeries(lng)
-        lat = gpd.GeoSeries(lat)
-        point = Point(lng.values[0],lat.values[0])
-        yourpoint = gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857')
-        tuoquart = quartieri[quartieri.within(yourpoint.gemetry.squeeze())]
-        return render_template('mappafinaleqt.html', tuoquart=tuoquart)
     else:
         return render_template('mappafinaleqt.html')
 
@@ -242,8 +238,10 @@ def mappa():
 
     elif scelta == '4':
         fig, ax = plt.subplots(figsize=(12, 8))
-        yourpoint.to_crs(epsg=3857).plot(ax=ax, color='r')
-        tuoquart.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
+        yourpoint = Point(lng.values[0],lat.values[0])
+        gpd.GeoSeries([yourpoint], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
+        tuoquart = quartieri[quartieri.within(yourpoint)]
+        tuoquart.to_crs('EPSG:3857').plot(ax = ax)
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)

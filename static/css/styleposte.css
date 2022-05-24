@@ -159,7 +159,9 @@ form .signup-link a:hover{
     
     align-items: center;
 }
-
+.radio_b{
+  align-self: baseline;
+}
 
 
 .custom_radio input{

@@ -2,19 +2,11 @@ Quartieri
 visualizza il quartiere in cui trovi non va (ghebrous)
 
 
-
-
 polizia 
 non va range(range no va ,non carica la mappa / se lascio visibile il punto della via, mostra il punto in un'altra parte in mezzo all'oceano.)
 
 scuole 
 non far vedere le scuole fuori da milano
-
-
-
-
-Login 
-1)place in strett map non trova la via anche se corretto (sistemato)
 
 
 
