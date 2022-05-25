@@ -206,11 +206,6 @@ def selezione():
     elif scelta == "3":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif scelta == "4":
-        global lng,lat
-        lng = session['lng'].values[0]
-        lat = session['lat'].values[0]
-        lng = gpd.GeoSeries(lng)
-        lat = gpd.GeoSeries(lat)
         return render_template('mappafinaleqt.html')
 
 
@@ -237,16 +232,26 @@ def mappa():
         return Response(output.getvalue(), mimetype='image/png')
 
     elif scelta == '4':
-        fig, ax = plt.subplots(figsize=(12, 8))
-        yourpoint = Point(lng.values[0],lat.values[0])
-        gpd.GeoSeries([yourpoint], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
-        tuoquart = quartieri[quartieri.within(yourpoint)]
-        tuoquart.to_crs('EPSG:3857').plot(ax = ax)
+        fig, ax = plt.subplots(figsize=(24, 16))
+       
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        print(lng)
+        print(lat)
+
+
+        fig, ax = plt.subplots(figsize = (12,8))
+        pointz = Point(lng.values[0],lat.values[0])
+        gpd.GeoSeries([pointz], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
+        quart_in = quartieri[quartieri.contains(pointz)]
+        print(quart_in)
+        quart_in.to_crs('EPSG:3857').plot(ax = ax, alpha=0.5)
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-
     else:
         fig, ax = plt.subplots(figsize=(12, 8))
         QtConfinanati = quartieri[quartieri.touches(
@@ -358,20 +363,21 @@ def polizia():
 
 @app.route('/selezione3', methods=['GET'])
 def selezione3():
-    global scelta
+    global scelta,val
+    val = 0
     scelta = request.args["scelta"]
     if scelta == "1":
-        return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True))
+        return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),val = 1)
     elif scelta == "2":
-        return render_template()
+        return render_template("sceltaPoliziaAction.html",val = 2)
     elif scelta == "3":
-        return render_template("mappafinalepolizia.html")
+        return render_template("mappafinalepolizia.html",val = 3)
 
 
 @app.route('/mappapolizia', methods=['GET'])
 def mappapolizia():
 
-    if scelta == "1":
+    if val == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_polizia_nil = comandi_polizialocale[comandi_polizialocale.NIL.str.contains(
@@ -387,9 +393,32 @@ def mappapolizia():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
 
-    elif scelta == "2":
+    elif val == "2":
+        range_int= int(range)
+        print(range_int)
 
-        return render_template()
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        print(lng)
+        print(lat)
+
+
+        fig, ax = plt.subplots(figsize = (12,8))
+        point = Point(lng.values[0],lat.values[0])
+        gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
+        dist = comandi_polizialocale.to_crs('EPSG:5234').distance(point) #distanza in metri
+        print(dist)
+        police_range = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000]
+        print(poste_range)
+        police_range.to_crs('EPSG:3857').plot(ax = ax)
+        contextily.add_basemap(ax=ax)
+        ax.set_axis_off()
+        output = io.BytesIO()
+        FigureCanvas(fig).print_png(output)
+        return Response(output.getvalue(), mimetype='image/png')  
+
     elif scelta == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 

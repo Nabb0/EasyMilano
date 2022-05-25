@@ -1,8 +1,45 @@
-<form action="/mappapolizia" method = "GET">
-    <select name="quartiere" >
-        {% for quartiere in quartieri%}
-        <option value="{{quartiere}}" >{{quartiere}}</option> 
-        {%endfor%}
-    </select>
-    <p><input type = "submit" value = "Submit" /></p>
-</form>
+<head>
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/styleposte.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css" integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    
+    <form action="/mappapolizia" method = "GET">
+        {%if val == 1%}
+        <select name="quartiere" >
+            {% for quartiere in quartieri%}
+            <option value="{{quartiere}}" >{{quartiere}}</option> 
+            {%endfor%}
+        </select>
+        <p><input type = "submit" value = "Submit" /></p>
+        {% elif val == 2%}
+        <form action="/mappapolizia">
+            <div class="main-container">
+                <h2>seleziona il Range! </h2>
+            <div class="center">
+                <input type="checkbox" id="show">
+                <label for="show" class="show-btn">Range</label>
+                <div class="container">
+                    <label for="show" class="close-btn fas fa-times" title="close"></label>
+                    <div class="text">
+                        SCEGLI IL RANGE DI CONTROLLO!
+                    </div>
+                    <form action="/mappaposte">
+                        <div class="data">
+                            <label>SPOSTA IL CURSORE IN BASE ALLE TUE NECESSITA'</label>
+                            <input type="range" min= min_range max="181" value="20" class="slider" title="km" id="myRange" name="range">
+                            <p><span id="demo"></span> Km</p>
+                        </div>
+                        <div class="btn">
+                            <div class="inner"></div>
+                            <button type="submit" value="2" name="radio" >CONFERMA</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+        </form> 
+        {% endif %}
+</body>
+

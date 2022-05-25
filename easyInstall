@@ -1,6 +1,5 @@
 pip install flask pandas geopandas matplotlib contextily Flask-Session tk
 python -m pip install mysql-connector-python
-python -m pip install tk-tools
 
 
 
