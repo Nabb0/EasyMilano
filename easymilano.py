@@ -150,8 +150,7 @@ def login():
         l_email = request.form.get("email")
         
         user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
-        scuole_in = scuole[scuole.contains(scuole)]
-        if user is not None :
+        if len(user) != 0 :
             session['email'] = user['email']
             session['psw'] = user['psw']
             session['lng'] = dati[dati["email"] == l_email]["lng"]
@@ -165,7 +164,7 @@ def login():
             print(boolean_user)
             return render_template('home.html', boolean_user = True)
         else: 
-            '<h1>Utente insesistente, riprova.</h1>'
+           return('<h1>Utente insesistente, riprova.</h1>')
 
 
 @app.route("/logout")
