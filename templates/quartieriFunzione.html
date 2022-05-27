@@ -5,10 +5,10 @@
     <link rel= "stylesheet" type= "text/css" href= "./static/css/styleposte.css">
 </head>
 <body>
-    <div class="main-container">
-        <div class="radio_button">
-            <form action="/selezione" class="radio_b">
-                            <!-- primo radio button -->
+    <form action="/selezione" class="radio_b">
+        <div class="main-container">
+            <div class="radio_button">
+                                <!-- primo radio button -->
                 <label class="custom_radio">
                     <input type="radio" name="radio" value="1">
                     <span class="radio_btn"><i class="fas fa-check"></i></span>
@@ -33,24 +33,13 @@
                     <span class="radio_btn"><i class="fas fa-check"></i></span>
                     <div class="opt-ricerca">
                         <i class="fas fa mailbox"></i>
-                        <h3>visualizza il quartiere in cui ti rovi</h3>
+                        <h3>visualizza il quartiere in cui ti trovi</h3>
                     </div>
                 </label>
-
-                
-                    <!-- quarto radio button -->
-                <label class="custom_radio">
-                    <input type="radio" name="radio" value="3">visualizza un quartiere<br>
-                    <span class="radio_btn"><i class="fas fa-check"></i></span>
-                    <div class="opt-ricerca">
-                        <i class="fas fa mailbox"></i>
-                        <h3>visualizza l'area di un quartiere di milano</h3>
-                    </div>
-                </label>
-                
-                <p><input type = "submit" value = "Submit"></p>
-            </form>
+                    
+            </div>
+            <p><input type = "submit" value = "Submit"></p>
         </div>
-    </div>
+    </form>
 </body>
 </html>

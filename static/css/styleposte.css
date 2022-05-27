@@ -138,34 +138,33 @@ form .signup-link a:hover{
 
 
 .main-container{
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 
 
 .main-container h2{
-    height: 50%;
-    margin: 0 0 80px 0;
-    color: rgb(221, 235, 36);
-    font-size: 80px;
-    font-family:"Raleway", sans-serif;
-    font-weight: 400;
-
+  height: 50%;
+  margin: 0 0 80px 0;
+  color: rgb(221, 235, 36);
+  font-size: 80px;
+  font-family:"Raleway", sans-serif;
+  font-weight: 400;
 }
 
 
 .radio_button{
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-    
-    align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  
+  align-items: center;
 }
 .radio_b{
   align-self: baseline;
@@ -173,20 +172,23 @@ form .signup-link a:hover{
 
 
 .custom_radio input{
-    display:none;
+  display:none;
+  flex-direction:row;
+  position: absolute;
 }
 
 .radio_btn{
-    margin: 10px;
-    width: 180px;
-    height: 200px;
-    border: 3px solid transparent;
-    display:inline-block ;
-    border-radius: 10px;
-    position: relative;
-    text-align: center;
-    box-shadow: 0 0 20px #cbce19a2;
-    cursor: pointer;
+  margin: 10px;
+  width: 360px;
+  height: 400px;
+  justify-content: space-between;
+  border: 3px solid transparent;
+  display:inline-block ;
+  border-radius: 10px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 0 20px #cbce19a2;
+  cursor: pointer;
 }
 
 
@@ -204,40 +206,39 @@ form .signup-link a:hover{
   pointer-events: none;
 }
 .radio_btn .opt-ricerca{
-    width: 80px;
-    height: 80px;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: red;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background-color: red;
 }
 .radio_btn .opt-ricerca i{
-    color:rgb(235, 190, 42) ;
-    line-height: 80px;
-    font-size: 60px;
+  color:rgb(235, 190, 42) ;
+  line-height: 80px;
+  font-size: 60px;
 }
 .radio_btn .opt-ricerca h3{
-    color:rgb(235, 190, 42) ;
-    font-size: 16px;
-    font-family:"Raleway", sans-serif;
-    font-weight: 400;
-    text-transform: uppercase;
+  color:rgb(235, 190, 42) ;
+  font-size: 16px;
+  font-family:"Raleway", sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
 }
 .custom_radio input:checked + .radio_btn{
-    border: 3px solid rgb(235, 190, 42);
+  border: 3px solid rgb(235, 190, 42);
 }
 .custom_radio input:checked + .radio_btn>i{
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 .main-container .p{
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-    background-color: red;
-    align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  background-color: red;
+  align-items: center;
 }

@@ -43,8 +43,7 @@
     <!-- secondo button deve mostrare un pop up che poi porterà alla mappa -->
     <div class="center">
         <input type="checkbox" id="show">
-        <label for="show" class="show-btn">Range</label>
-        <h3>visualizza tutte le poste di milano in base ad un range personalizzabile!</h3>
+        <label for="show" class="show-btn">visualizza le poste di milano tramite un range personalizzabile!</label>
         <div class="container">
             <label for="show" class="close-btn fas fa-times" title="close"></label>
             <div class="text">
@@ -53,8 +52,8 @@
             <form action="/mappaposte">
                 <div class="data">
                     <label>SPOSTA IL CURSORE IN BASE ALLE TUE NECESSITA'</label>
-                    <input type="range" min= min_range max="181" value="20" class="slider" title="km" id="myRange" name="range">
-                    <p><span id="demo"></span> Km</p>
+                    <input type="range" min= "0" max="95" value="20" class="slider" title="km" id="myRange" name="range">
+                    <p><span id="demo"></span></p>
                 </div>
                 <div class="btn">
                     <div class="inner"></div>
@@ -62,14 +61,6 @@
                 </div>
             </form>
         </div>
-        </div>
-                
-
-
-
-
-
-
-
+    </div>
 </body>
 

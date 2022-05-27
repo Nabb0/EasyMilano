@@ -273,7 +273,6 @@ def posteFunzione():
 
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
-    global scelta
 
     scelta = request.args["radio"]
 
@@ -292,8 +291,7 @@ def mappaposte():
     if scelta == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
-        uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(
-            NIL_utente)]
+        uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -357,12 +355,12 @@ def mappaposte():
 
 @app.route('/polizia', methods=['GET'])
 def polizia():
+    
     return render_template("PoliziaFunzione.html")
 
 
 @app.route('/selezione3', methods=['GET'])
 def selezione3():
-    global scelta,val
     val = 0
     scelta = request.args["scelta"]
     if scelta == "1":
