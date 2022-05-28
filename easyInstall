@@ -3,7 +3,11 @@ python -m pip install mysql-connector-python
 
 
 
-
+                    <li class="menu-item" value="grado"><a href="#0" value="grado">Ctp</a></li>
+                    <li class="menu-item" value="grado"><a href="#0" value="grado">Istituto Istruzione Primario</a></li>
+                    <li class="menu-item" value="grado"><a href="#0" value="grado">Istituto Istruzione Secondario Primo grado</a></li>
+                    <li class="menu-item" value="grado"><a href="#0" value="grado">Scuola dell Infanzia</a></li>
+                    <li class="menu-item" value="grado"><a href="#0" value="grado">Istituto Istruzione Secondario Secondo grado</a></li>
 
 
 
