@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, Response, redirect, url_for, make_response, session 
 from flask_session import Session
 from ctypes.wintypes import POINT
@@ -531,7 +530,6 @@ def mappascuole():
 
     elif Grado == "Scuola dell Infanzia":
         scuola_geo = scuole[scuole["Tipologia"] ==  "Scuola dell'Infanzia"]
-        print(scuola_geo.crs)
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
          scuola_geo["coorX"], scuola_geo["coorY"]))
 
