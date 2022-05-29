@@ -1,182 +1,74 @@
-@import url('https://fonts.googleapis.com/css?family=Varela+Round');
- * {
-	 box-sizing: border-box;
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+
+* {
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+  text-align: center;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -ms-transition: all .2s;
+  -o-transition: all .2s;
+  transition: all .2s;
 }
- :root {
-	 --accent-color: #BFF098;
-	 --gradient-color: #D8B5FF;
+
+html {
+  height: 100%;
 }
- a:focus {
-	 outline: none;
-	 position: relative;
+
+body { 
+  justify-content: space-between;
+  text-align: center;
+  background:linear-gradient(90deg, #EC6F66 10%, #F3A183 90%); /* W3C */
+  font-family: 'Raleway', sans-serif; 
+  font-size: 30px; 
 }
- a:focus:after {
-	 width: 50px;
+h1{
+	color: aliceblue;
+	font-size: 92px;
+	margin-top: 2%;
 }
- a:after {
-	 content: "";
-	 background: #FBFBFB;
-	 position: absolute;
-	 bottom: 5px;
-	 left: 15px;
-	 height: 3px;
-	 width: 0;
-	 transition: .5s;
-	 transition-delay: .2s;
+#header-container {
+  display:inline-block;
+  position: relative;
+  width: 50%;
+  top: 50%;
+  text-align:center;
+  margin-top: 15%;
 }
- body {
-	 background: #1d1e20;
-	 font-family: "Varela Round", Nunito, Montserrat, sans-serif;
-	 margin: 0;
-	 padding: 0;
-	 text-transform: capitalize;
+
+/* Select style here */
+
+select {
+  margin: 0 auto;
+  color: #F3A183;
+  text-align: center;
+  width: 800px;
+  padding: 15px;
+  height: 50px;
+  cursor: pointer;
+  background: url(http://sharpik.com/wip/cuteselect/arrow.png) 295px 12px no-repeat white;
 }
- .menu {
-	 margin: 15px;
+/* scritta sopra  */
+select:hover {
+  background-color: transparent;
+  text-align: center;
+  color: white;
+  padding: 50px 5px 20px 25px;
 }
- .menu > ol {
-	 list-style: none;
-	 margin: 100px 10px;
-     
-	 padding: 0;
+
+select option {
+  background-color: white;
+  color: gray;
+  text-align: center;
+  width: 800px;
+  padding: 10px 15px;
+  height: 50px;
+  cursor: pointer;
 }
- .menu > ol > li {
-	 background:linear-gradient(#1b1b1b,#050505);
-	 border-left: 5px solid var(--gradient-color);
-	 margin-bottom: 1px;
-	 position: relative;
-	 transition: .5s;
+/* rientranza */
+select option:hover {
+  padding-left: 25px;
+  width: 75%;
+  color: #EC6F66;
 }
- .menu > ol > li:nth-child(1) {
-     background: linear-gradient(#FDA085,#BFF098);
- }
- .menu > ol > li a {
-	 color: #FBFBFB;
-	 display: block;
-	 padding: 15px;
-	 position: relative;
-	 text-decoration: none;
-	 z-index: 1;
-}
- .menu > ol > li a:not(:last-child):before {
-	 content: "\f078";
-	 font-family: fontAwesome;
-	 font-size: .75em;
-	 line-height: 50px;
-	 position: absolute;
-	 right: 25px;
-	 top: 0;
-	 bottom: 0;
-	 margin: auto;
-	 transition: .5s;
-}
- .menu > ol > li:focus, .menu > ol > li:focus-within, .menu > ol > li:hover {
-	 z-index: 100;
-}
- .menu > ol > li:focus:after, .menu > ol > li:focus-within:after, .menu > ol > li:hover:after {
-	 background: linear-gradient(to left,var(--accent-color),var(--gradient-color));
-	 max-width: 800px;
-}
- .menu > ol > li:focus .sub-menu, .menu > ol > li:focus-within .sub-menu {
-	 max-height: 500px;
-}
- .menu > ol > li:focus a:before, .menu > ol > li:focus-within a:before {
-	 transform: rotate(-180deg);
-}
- .menu > ol > li:after {
-	 background: #3c3c3c;
-	 content: "";
-	 position: absolute;
-	 left: 0;
-	 right: 0;
-	 top: 0;
-	 bottom: 0;
-	 transition: .5s;
-	 max-width: 0;
-	 overflow: hidden;
-}
- .menu > ol .sub-menu {
-	 border-left: 1px solid #FBFBFB;
-	 margin-left: 22.5px;
-	 list-style: none;
-	 max-height: 0px;
-	 overflow: hidden;
-	 padding-left: 7.5px;
-	 position: relative;
-	 transition: .5s;
-	 z-index: 1;
-}
- .menu > ol .sub-menu li {
-	 font-size: .9em;
-}
- .menu > ol .sub-menu li:hover, .menu > ol .sub-menu li a:focus {
-	 background: rgba(60,60,60,0.3);
-}
- .menu > ol .sub-menu li a:after {
-	 bottom: 5px;
-	 height: 1px;
-}
- .menu > ol .sub-menu li a:hover:after, .menu > ol .sub-menu li a:focus:after {
-	 width: 15px;
-}
- @media (min-width: 600px) {
-	 a:focus, a:hover {
-		 position: relative;
-	}
-	 a:focus:after, a:hover:after {
-		 width: 50px;
-	}
-	 a:after {
-		 left: 0;
-		 right: 0;
-		 margin: auto;
-	}
-	 .menu {
-		 margin: 0;
-		 margin-top: 40vh;
-	}
-	 .menu > ol {
-		 display: block;
-		 max-width: none;
-		 text-align: center;
-	}
-	 .menu > ol > li {
-		 border-top: 5px solid var(--accent-color);
-		 border-left: 0;
-		 display: inline-block;
-		 margin-left: -5px;
-		 vertical-align: top;
-		 width: 120px;
-	}
-	 .menu > ol > li:hover:after, .menu > ol > li:focus:after, .menu > ol > li:focus-within:after {
-		 background: linear-gradient(to bottom,var(--accent-color),var(--gradient-color));
-		 border-radius: 3px;
-		 top: -15px;
-		 bottom: -15px;
-		 left: -15px;
-		 right: -15px;
-	}
-	 .menu > ol > li:hover .sub-menu, .menu > ol > li:focus .sub-menu, .menu > ol > li:focus-within .sub-menu {
-		 max-height: 750px;
-	}
-	 .menu > ol > li a:not(:last-child):before {
-		 right: 12.5px;
-	}
-	 .menu > ol > li:hover a:before {
-		 transform: rotate(-180deg);
-	}
-	 .menu > ol .sub-menu {
-		 border-left: 0;
-		 margin: 15px -15px -15px;
-		 padding-left: 0;
-	}
-}
- @media (min-width: 775px) {
-	 .menu > ol > li {
-		 width: 150px;
-	}
-	 .menu > ol > li a:not(:last-child):before {
-		 right: 25px;
-	}
-}
- 

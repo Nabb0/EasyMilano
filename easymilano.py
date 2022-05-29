@@ -357,31 +357,30 @@ def mappaposte():
 
 @app.route('/polizia', methods=['GET'])
 def polizia():
-    
     return render_template("PoliziaFunzione.html")
 
 
 @app.route('/selezione3', methods=['GET'])
 def selezione3():
-    global val, scelta
-    val = 0
-    scelta = request.args["scelta"]
-    if scelta == "1":
-        return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),val = 1)
-    elif scelta == "2":
-        return render_template("sceltaPoliziaAction.html",val = 2)
-    elif scelta == "3":
-        return render_template("mappafinalepolizia.html",val = 3)
+    global sceltapolice
+
+    sceltapolice = request.args["scelta"]
+    if sceltapolice == "1":
+        return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltapolice = 1)
+    elif sceltapolice == "2":
+        range = request.args['range']
+        return render_template("mappafinalepolizia.html",sceltapolice = 2)
+    elif sceltapolice == "3":
+        return render_template("mappafinalepolizia.html",sceltapolice = 3)
 
 
 @app.route('/mappapolizia', methods=['GET'])
 def mappapolizia():
 
-    if val == "1":
+    if sceltapolice == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
-        uffici_polizia_nil = comandi_polizialocale[comandi_polizialocale.NIL.str.contains(
-            NIL_utente)]
+        uffici_polizia_nil = comandi_polizialocale[comandi_polizialocale.NIL.str.contains(NIL_utente)]
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -393,7 +392,7 @@ def mappapolizia():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
 
-    elif val == "2":
+    elif sceltapolice == "2":
         range_int= int(range)
         print(range_int)
 
@@ -419,7 +418,7 @@ def mappapolizia():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')  
 
-    elif val == "3":
+    elif sceltapolice == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 
         comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax, color='k')

@@ -7,14 +7,14 @@
 <body>
     
     <form action="/mappapolizia" method = "GET">
-        {%if val == 1%}
+        {%if sceltapolice == 1%}
         <select name="quartiere" >
             {% for quartiere in quartieri%}
             <option value="{{quartiere}}" >{{quartiere}}</option> 
             {%endfor%}
         </select>
         <p><input type = "submit" value = "Submit" /></p>
-        {% elif val == 2%}
+        {% elif sceltapolice == 2%}
         <form action="/mappapolizia">
             <div class="main-container">
                 <h2>seleziona il Range! </h2>
