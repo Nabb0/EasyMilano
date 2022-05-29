@@ -273,22 +273,22 @@ def posteFunzione():
 
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
-
-    scelta = request.args["radio"]
-
-    if scelta == "1":
-        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),scelta = 1)
-    elif scelta == "2":
-        return render_template("posteFunzione.html",scelta = 2)
-    elif scelta == "3":
-        return render_template("mappafinaleposte.html",scelta = 3)
+    global sceltaposte
+    sceltaposte = request.args["radio"]
+    if sceltaposte == "1":
+        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
+    elif sceltaposte == "2":
+        range = request.args['range']
+        return render_template("mappafinaleposte.html",sceltaposte = 2)
+    elif sceltaposte == "3":
+        return render_template("mappafinaleposte.html",sceltaposte = 3)
 
 
 @app.route('/mappaposte', methods=['GET'])
 def mappaposte():
+    
     # poste in qt selto
-    scelta = request.args["radio"]
-    if scelta == "1":
+    if sceltaposte == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
@@ -304,7 +304,8 @@ def mappaposte():
         return Response(output.getvalue(), mimetype='image/png')
 
         return render_template("mappafinaleposte.html")
-    elif scelta=="2":
+        #range
+    elif sceltaposte == "2":
         range = request.args['range']
         range_int= int(range)
         print(range_int)
@@ -337,8 +338,8 @@ def mappaposte():
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')  
-
-    elif scelta == "3":
+        #tutte le poste
+    elif sceltaposte == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 
         uffici_postali.to_crs(epsg=3857).plot(ax=ax, color='r')
@@ -347,6 +348,7 @@ def mappaposte():
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
+    
 
 # _______________________________________________________________________
 # polizia
@@ -361,6 +363,7 @@ def polizia():
 
 @app.route('/selezione3', methods=['GET'])
 def selezione3():
+    global val, scelta
     val = 0
     scelta = request.args["scelta"]
     if scelta == "1":
@@ -416,7 +419,7 @@ def mappapolizia():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')  
 
-    elif scelta == "3":
+    elif val == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 
         comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax, color='k')
