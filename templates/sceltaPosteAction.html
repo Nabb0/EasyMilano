@@ -5,11 +5,11 @@
     <title>school</title>
 </head>
 <div class="bc0">
-    <h1>-SCUOLE-</h1>
+    <h1>-POSTE-</h1>
     <section id="header-container">
         <form action="/passaggio/<radio>" method = "GET">
             <select name="grado" >
-                <option disabled>SELEZIONA IL GRADO SCOLASTICO INTERESSATO:</option>
+                <option disabled>SELEZIONA IL QUARTIERE INTERESSATO:</option>
                 {% for quartiere in quartieri%}
                 <li class="menu-item" name="quartiere"><option value="{{quartiere}}" >{{quartiere}}</option></li>
                 {%endfor%}
