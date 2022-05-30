@@ -15,17 +15,11 @@
 html {
   height: 100%;
 }
-#bc {
-  justify-content: space-between;
-  text-align: center;
-  background:linear-gradient(90deg, #080349 10%, #060470 90%); /* W3C */
-  font-family: 'Raleway', sans-serif; 
-  font-size: 30px; 
-}
+
 body { 
   justify-content: space-between;
   text-align: center;
-  background:linear-gradient(90deg, #EC6F66 10%, #F3A183 90%); /* W3C */
+  background:linear-gradient(90deg, #080349 10%, #060470 90%); /* W3C */
   font-family: 'Raleway', sans-serif; 
   font-size: 30px; 
 }
@@ -48,7 +42,7 @@ h1{
 
 select {
   margin: 0 auto;
-  color: #F3A183;
+  color: #0e1983;
   text-align: center;
   width: 800px;
   padding: 15px;
@@ -77,5 +71,5 @@ select option {
 select option:hover {
   padding-left: 25px;
   width: 75%;
-  color: #EC6F66;
+  color: #0e1983;
 }
