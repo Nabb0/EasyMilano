@@ -9,20 +9,26 @@
 body{
   height: 100vh;
   width: 100%;
-  background: linear-gradient(115deg, #0c33e4 10%, #5a01ea 90%);
+  background: linear-gradient(115deg, #e40c0c 10%, #ebe353 90%);
+}
+.bc{
+  height: 100vh;
+  width: 100%;
+  
+  background: linear-gradient(115deg, #9abd63 10%, #ffef62 90%);
 }
 .show-btn{
   background: rgba(255, 255, 255);
   padding: 10px 20px;
-  font-size: 200%;
+  font-size: 180%;
   font-weight: 500;
   color: #3498db;
   cursor: pointer;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
 }
 .show-btn, .container{
-  height: 20%;
-  width: 20%;
+  height: 30%;
+  width: 30%;
   position: absolute;
   text-align: center;
   text-orientation:upright;
@@ -39,8 +45,8 @@ input[type="checkbox"]{
 .container{
   display:none;
   background: rgba(255, 255, 255);
-  width: 30%;
-  height: 70%;
+  width: 40%;
+  height: 60%;
   padding: 30px;
   box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
@@ -194,7 +200,7 @@ form .signup-link a:hover{
 
 .radio_btn > i { 
   color: #ffff;
-  background-color:rgb(235, 190, 42) ;
+  background-color:rgb(245, 199, 47) ;
   font-size: 20px;
   position: absolute;
   top: -15px;
@@ -215,7 +221,7 @@ form .signup-link a:hover{
   background-color: red;
 }
 .radio_btn .opt-ricerca i{
-  color:rgb(235, 190, 42) ;
+  color:rgb(206, 167, 37) ;
   line-height: 80px;
   font-size: 60px;
 }
@@ -241,4 +247,7 @@ form .signup-link a:hover{
   justify-content: space-between;
   background-color: red;
   align-items: center;
+}
+.p input{
+  color: #3498db;
 }

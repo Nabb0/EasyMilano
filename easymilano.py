@@ -7,6 +7,7 @@ from unittest import skip
 from xmlrpc.client import boolean
 from numpy import empty, place
 import shapely
+import urllib.request
 # import turtle
 # from turtle import color, pos
 import pyproj
@@ -269,23 +270,25 @@ def mappa():
 def posteFunzione():
     return render_template('posteFunzione.html')
 
-
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
-    global sceltaposte
+    print(request.args)
     sceltaposte = request.args["radio"]
     if sceltaposte == "1":
         return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
     elif sceltaposte == "2":
         range = request.args['range']
-        return render_template("mappafinaleposte.html",sceltaposte = 2)
+        # return render_template("mappafinaleposte.html",sceltaposte = 2)
+        return redirect(f'/mappaposte/2/{range}')
     elif sceltaposte == "3":
-        return render_template("mappafinaleposte.html",sceltaposte = 3)
+        # return render_template("mappafinaleposte.html",sceltaposte = 3)
+        return redirect(f'/mappaposte/3/None')
 
+@app.route('/mappaposte/<radio>/<range>', methods=['GET'])
+def root_mappaposte(radio, range):
 
-@app.route('/mappaposte', methods=['GET'])
-def mappaposte():
-    
+    print(radio, range)
+    sceltaposte = int(radio)
     # poste in qt selto
     if sceltaposte == "1":
         NIL_utente = request.args["quartiere"]
@@ -305,7 +308,6 @@ def mappaposte():
         return render_template("mappafinaleposte.html")
         #range
     elif sceltaposte == "2":
-        range = request.args['range']
         range_int= int(range)
         print(range_int)
 
@@ -336,7 +338,9 @@ def mappaposte():
         ax.set_axis_off()
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return Response(output.getvalue(), mimetype='image/png')  
+        # img_poste = urllib.request.urlretrieve("../static/images/img_user/poste/range_poste.jpg")
+        return Response(output.getvalue(), mimetype='image/png')
+
         #tutte le poste
     elif sceltaposte == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -346,7 +350,7 @@ def mappaposte():
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return Response(output.getvalue(), mimetype='image/png')
+        return render_template("mappafinaleposte.html")
     
 
 # _______________________________________________________________________
