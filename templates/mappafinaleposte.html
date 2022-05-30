@@ -1,1 +1,7 @@
-<img src="/mappaposte>
+{%if sceltaposte == 1%}
+    <img src="/mappaposte/<radio>">
+{% elif sceltaposte == 2%}
+    <img src="/mappaposte/<radio>/<range>">
+{%elif sceltaposte == 3%}
+    <img src="/mappaposte/<radio>">
+{%endif%}
