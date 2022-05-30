@@ -75,3 +75,13 @@ select option:hover {
   width: 75%;
   color: #0e1983;
 }
+.poltot{
+  position: absolute;
+  width: 50%;
+  height: 65%;
+  top: 30%;
+  left: 2%;
+  resize:both;
+  overflow:hidden;
+  box-sizing: border-box;
+}
