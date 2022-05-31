@@ -143,29 +143,26 @@ def test():
 # _______________________________________________________________________
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    global user
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
         l_psw = request.form.get("pwd")
         l_email = request.form.get("email")
         
-        user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
+        user= data[(data['email'] == l_email) & (data['psw'] == l_psw)]
         if len(user) != 0 :
             session['email'] = user['email']
             session['psw'] = user['psw']
-            session['lng'] = dati[dati["email"] == l_email]["lng"]
-            session['lat'] = dati[dati["email"] == l_email]["lat"]
-            session['geometry'] = dati[dati["email"] == l_email]["geometry"]
+            session['lng'] = data[data["email"] == l_email]["lng"]
+            session['lat'] = data[data["email"] == l_email]["lat"]
+            session['geometry'] = data[data["email"] == l_email]["geometry"]
             
-
-            session['point'] = dati_session[dati_session["email"] == l_email]["point"]
-            session['pos'] = dati_session[dati_session["email"] == l_email]["pos"]
-            session['points'] = dati_session[dati_session["email"] == l_email]["points"]
-            session['place'] = dati_session[dati_session["email"] == l_email]["place"]
-            session['via'] = dati_session[dati_session["email"] == l_email]["via"]
-            session['boolean_user'] = dati_session[dati_session["email"] == l_email]["boolean_user"]
-            session['utente'] = dati_session[dati_session["email"] == l_email]["utente"]
+        # session provenienti da register/login
+            session['post'] = data[data["email"] == l_email]["post"]
+            session['points'] = data[data["email"] == l_email]["points"]
+            session['place'] = data[data["email"] == l_email]["place"]
+            session['via'] = data[data["email"] == l_email]["via"]
+            session['boolean_user'] = data[data["email"] == l_email]["boolean_user"]
             
             boolean_user = bool(True)
             print(session['tupla_point'])
@@ -186,6 +183,18 @@ def logout():
     session['lng'] = None
     session['lat'] = None
     session['geometry'] = None
+    session['post'] = None
+    session['points'] = None
+    session['place'] = None
+    session['via'] = None
+    session['boolean_user'] = None
+    session['scelta'] = None
+    session['lista_qt'] = None
+    session['sceltaposte'] = None
+    session['rangevarposte'] = None
+    session['sceltapolice'] = None
+    session['rangevar'] = None
+    session['Grado'] = None
     print(session['email'])
     print(session['psw'])
     print(session['lat'])
@@ -206,36 +215,34 @@ def quartieriFunzione():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
-    global lista_qt, scelta
     lista_qt = quartieri.NIL.to_list()  # DEVO PER FORZA TRASFORMARE IN LISTA
+    session['lista_qt'] = lista_qt
     scelta = request.args["radio"]
-
-    if scelta == "1":
+    session['scelta'] = scelta
+    if session['scelta'] == "1":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
-    elif scelta == "2":
+    elif session['scelta'] == "2":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
-    elif scelta == "3":
+    elif session['scelta'] == "3":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
-    elif scelta == "4":
+    elif session['scelta'] == "4":
         return render_template('mappafinaleqt.html')
 
 
 @app.route('/visualizzaqt', methods=['GET'])
 def visualizzaqt():
-    global quartiere
     nome_quartiere = request.args["quartiere"]
     quartiere = quartieri[quartieri.NIL.str.contains(nome_quartiere)]
-    if scelta == "3":
-        area = quartiere.geometry.area/10**6
-        return render_template('Lunghezzaqt.html', area=area)
-    else:
-        return render_template('mappafinaleqt.html')
+    session['quartiere'] = quartiere
+    print(session['quartiere'])
+    return render_template('mappafinaleqt.html')
 
 
 @app.route('/mappa', methods=['GET'])
 def mappa():
-    if scelta == "1":
-        
+    session['scelta']
+    quartiere = session['quartiere']
+    if session['scelta'] == "1":
         fig, ax = plt.subplots(figsize=(12, 8))
         quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
         contextily.add_basemap(ax=ax)
@@ -243,7 +250,7 @@ def mappa():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
 
-    elif scelta == '4':
+    elif session['scelta'] == '4':
         fig, ax = plt.subplots(figsize=(24, 16))
        
         lng = session['lng'].values[0]
@@ -285,24 +292,23 @@ def posteFunzione():
 
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
-    global sceltaposte
-    
     sceltaposte = request.args["radio"]
-    if sceltaposte == "1":
+    session['sceltaposte'] = sceltaposte
+    if session['sceltaposte'] == "1":
         return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
-    elif sceltaposte == "2":
-        global rangevarposte
+    elif session['sceltaposte'] == "2":
         rangevarposte = request.args['rangeposte']
+        session['rangevarposte'] = rangevarposte
         return render_template("mappafinaleposte.html",sceltaposte = 2)
         # return redirect(f'/mappaposte/2/{range}')
-    elif sceltaposte == "3":
+    elif session['sceltaposte'] == "3":
         return render_template("mappafinaleposte.html",sceltaposte = 3)
         # return render_template("mappafinaleposte.html",sceltaposte = 3)
         # return redirect(f'/mappaposte/3/None')
 @app.route('/mappaposte', methods=['GET'])
 def root_mappaposte():
     # poste in qt selto
-    if sceltaposte == "1":
+    if session['sceltaposte'] == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
@@ -318,7 +324,7 @@ def root_mappaposte():
         return Response(output.getvalue(), mimetype='image/png')
 
         #range
-    elif sceltaposte == "3":
+    elif session['sceltaposte'] == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 
         uffici_postali.to_crs(epsg=3857).plot(ax=ax, color='r')
@@ -327,9 +333,9 @@ def root_mappaposte():
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-    elif sceltaposte == "2":
-        global rangevarposte
-        range_int= int(rangevarposte)
+    elif session['sceltaposte'] == "2":
+        session['rangevarposte']
+        range_int= int(session['rangevarposte'])
         print(range_int)
 
         #____________________     
@@ -374,22 +380,21 @@ def polizia():
 
 @app.route('/selezione3', methods=['GET'])
 def selezione3():
-    global sceltapolice
-
     sceltapolice = request.args["scelta"]
-    if sceltapolice == "1":
+    session['sceltapolice'] = sceltapolice
+    if session['sceltapolice'] == "1":
         return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltapolice = 1)
-    elif sceltapolice == "2":
-        global rangevar
+    elif session['sceltapolice'] == "2":
         rangevar = request.args['range2']
+        session['rangevar'] =rangevar
         return render_template("mappafinalepolizia.html",sceltapolice = 2)
-    elif sceltapolice == "3":
+    elif session['sceltapolice'] == "3":
         return render_template("mappafinalepolizia.html",sceltapolice = 3)
 
 @app.route('/mappapolizia', methods=['GET'])
 def mappapolizia():
 
-    if sceltapolice == "1":
+    if session['sceltapolice'] == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_polizia_nil = comandi_polizialocale[comandi_polizialocale.NIL.str.contains(NIL_utente)]
@@ -404,9 +409,9 @@ def mappapolizia():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
 
-    elif sceltapolice == "2":
-        global rangevar
-        range_int= int(rangevar)
+    elif session['sceltapolice'] == "2":
+        session['rangevar']
+        range_int= int(session['rangevar'])
         print(range_int)
 
         lng = session['lng'].values[0]
@@ -431,9 +436,8 @@ def mappapolizia():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')  
 
-    elif sceltapolice == "3":
+    elif session['sceltapolice'] == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
-
         comandi_polizialocale.to_crs(epsg=3857).plot(ax=ax, color='k')
         quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
         contextily.add_basemap(ax=ax)
@@ -458,24 +462,23 @@ def SceltaGrado():
 
 @app.route('/Gradoselezionato', methods=['GET'])
 def Gradoselezionato():
-    global Grado
     Grado = request.args["grado"]
-
-    if Grado == "Ctp":
+    session['Grado'] = Grado
+    if session['Grado'] == "Ctp":
         return render_template("mappafinalescuole.html")
-    elif Grado == "Istituto Istruzione Primario":
+    elif session['Grado'] == "Istituto Istruzione Primario":
         return render_template("mappafinalescuole.html")
-    elif Grado == "Istituto Istruzione Secondario Primo grado":
+    elif session['Grado'] == "Istituto Istruzione Secondario Primo grado":
         return render_template("mappafinalescuole.html")
-    elif Grado == "Scuola dell Infanzia":
+    elif session['Grado'] == "Scuola dell Infanzia":
         return render_template("mappafinalescuole.html")
-    elif Grado == "Istituto Istruzione Secondario Secondo grado":
+    elif session['Grado'] == "Istituto Istruzione Secondario Secondo grado":
         return render_template("mappafinalescuole.html")
 
 
 @app.route('/mappascuole', methods=['GET'])
 def mappascuole():
-    print(Grado)
+    Grado = session['Grado']
     if Grado == "Ctp":
         #milano=quartieri[quartieri.intersects(quartieri.unary_union)]
         scuola_geo = scuole[scuole["Tipologia"] == Grado]
