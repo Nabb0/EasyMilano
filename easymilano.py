@@ -294,7 +294,7 @@ def selezione2():
 @app.route('/mappaposte', methods=['GET'])
 def root_mappaposte():
     # poste in qt selto
-    if sceltaposte == 1:
+    if sceltaposte == "1":
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
@@ -310,7 +310,7 @@ def root_mappaposte():
         return Response(output.getvalue(), mimetype='image/png')
 
         #range
-    elif sceltaposte == 3:
+    elif sceltaposte == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 
         uffici_postali.to_crs(epsg=3857).plot(ax=ax, color='r')
@@ -319,7 +319,7 @@ def root_mappaposte():
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-    elif sceltaposte == 2:
+    elif sceltaposte == "2":
         global rangevarposte
         range_int= int(rangevarposte)
         print(range_int)

@@ -5,10 +5,11 @@
     <link rel= "stylesheet" type= "text/css" href= "./static/css/stylebuttonup.css">
     <title>school</title>
 </head>
-<div class="bc0">
+  <div class="bc0">
     <h1>-POSTE-</h1>
     <section id="header-container">
         <form action="/mappaposte" method = "GET">
+            {%if sceltaposte == 1%}
             <select name="grado" >
                 <option disabled>SELEZIONA IL QUARTIERE INTERESSATO:</option>
                 {% for quartiere in quartieri%}
@@ -18,9 +19,39 @@
             <p><input type = "submit" value = "Submit" /></p>
         </form>
       </section>
-    
+</div>
+           {% elif sceltaposte == 3%}
+            <form action="/mappaposte">
+                <div class="main-container">
+                    <h2>seleziona il Range! </h2>
+                <div class="center">
+                    <input type="checkbox" id="show">
+                    <label for="show" class="show-btn">Range</label>
+                    <div class="container">
+                        <label for="show" class="close-btn fas fa-times" title="close"></label>
+                        <div class="text">
+                            SCEGLI IL RANGE DI CONTROLLO!
+                        </div>
+                        <form action="/mappaposte">
+                            <div class="data">
+                                <label>SPOSTA IL CURSORE IN BASE ALLE TUE NECESSITA'</label>
+                                <input type="range" min="0" max="181" value="20" class="slider" title="km" id="myRange" name="range">
+                                <p><span id="demo"></span> Km</p>
+                            </div>
+                            <div class="btn">
+                                <div class="inner"></div>
+                                <button type="submit" value="3" name="radio" >CONFERMA</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+            </form>
+        </section> 
+            {% endif %}
+
 </div>
 
+          
 <script>
     (function() {
 
