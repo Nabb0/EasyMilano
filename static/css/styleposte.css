@@ -257,3 +257,18 @@ form .signup-link a:hover{
 .p input{
   color: #3498db;
 }
+.poltot{
+  position: absolute;
+  width: 50%;
+  height: 65%;
+  top: 30%;
+  left: 2%;
+  resize:both;
+  overflow:hidden;
+  box-sizing: border-box;
+}
+.img{
+  position: relative;
+  top: 30%;
+  left: 50%;
+}

@@ -172,7 +172,8 @@ def login():
             print(session['lat'])
             print(boolean_user)
             return render_template('home.html', boolean_user = True)
-        else: 
+        else:
+           print(session['psw'])
            return('<h1>Utente insesistente, riprova.</h1>')
 
 
@@ -446,10 +447,9 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 @app.route('/table.png', methods=['GET'])
 def tab():
-    tabella = uffici_polizia_nil.to_html()
+    tabella = uffici_polizia_nil.to_list()
     return render_template("mappafinalepolizia.html", table = tabella)
     
-
 # _______________________________________________________________________
 # Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622
 # https://github.com/Nabb0/Python-appunti-ed-esercizi/blob/main/esercizi/Geopandas/Riva_es6.ipynb

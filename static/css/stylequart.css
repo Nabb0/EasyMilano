@@ -15,7 +15,7 @@ html {
   height: 100%;
 }
 
-body { 
+.bc0{ 
   justify-content: space-between;
   text-align: center;
   background: linear-gradient(90deg, #9abd63 10%, #ffef62 90%);
