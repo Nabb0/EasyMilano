@@ -90,7 +90,7 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     global point,pos,points, place, via, boolean_user,utente, dati
-
+# prende il nome della via inserita dall'utente e tramite openstreetmap prende le coordinate separatamente, in modo da creare poi il punto quando serve.
     def get_place(via_input, citta="milano"):
         via_input = '+'.join(via_input.lower().split())
         place = requests.get(f"https://nominatim.openstreetmap.org/search?q={via_input},+{citta},+milano&format=json&polygon=1&addressdetails=1").json()
@@ -114,17 +114,22 @@ def register():
             return 'le password non corrispondono'
         else:
             global lng, lat
+            # forniamo 2 variabili vuote da riempire con le 2 coordinate
             lng = get_place(request.form.get("via"))['lng']
             lat = get_place(request.form.get("via"))['lat'] # prende lat e la porta nella funzione get_place, diventa via_input essendo il primo qualcosa
             print(lng)
             print(lat)
             tupla_point = (lng,lat)
             #print(tupla_point)
+            # creazione del punto
             points = Point(tupla_point[0], tupla_point[1])
             
             print(points)
+            # creazione del dizionario 
             utente = [{"name": name,"surname":surname, "psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points}]
+            # append dei dati forniti
             dati = dati.append(utente,ignore_index=True)
+            # trasportarli nel file csv a cui si riferisce
             dati.to_csv('./static/file/dati.csv',index=False)
 
             return redirect(url_for('login'))

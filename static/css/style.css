@@ -135,6 +135,11 @@ section img#blu{
     color: #fff;
     float:initial;
 }
+.sec li img{
+    height: 100px;
+    width: auto;
+    transform: translate(600%, 0%);
+}
 .container{
     text-align: center;
     top: 0;
@@ -142,7 +147,6 @@ section img#blu{
     justify-content: center;
     align-items: center;
 }
-
 .container li a:hover ,
 .container li a:hover.active
 {
