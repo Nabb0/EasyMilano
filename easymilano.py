@@ -305,7 +305,7 @@ def root_mappaposte(radio):
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return Response(output.getvalue(), mimetype='image/png')
+        return render_template()
 
         #range
     elif val == 3:
