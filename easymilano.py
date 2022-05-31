@@ -45,7 +45,7 @@ from shapely.ops import transform
 
 
 # Dichiarazioni dei geodataframe
-dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
+data = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
 
 quartieri = gpd.read_file(
     './static/file/ds964_nil_wm-20220405T093028Z-001.zip')
@@ -65,17 +65,6 @@ scuole = gpd.read_file(
 scuole_geometry = gpd.GeoDataFrame()
 
 reg_logout = "./static/images/images route/register.png"
-
-boolean_user = bool(False)
-# for _, r in scuole:
-# for _, r in scuole:
-
-# metro = gpd.read_file('./static/file/tpl_metropercorsi.geojson')
-
-
-# home e registrazione
-
-# a
 @app.route('/', methods=['GET'])
 def home():
     
@@ -89,7 +78,7 @@ def home():
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    global point,pos,points, place, via, boolean_user,utente, dati
+
 # prende il nome della via inserita dall'utente e tramite openstreetmap prende le coordinate separatamente, in modo da creare poi il punto quando serve.
     def get_place(via_input, citta="milano"):
         via_input = '+'.join(via_input.lower().split())
@@ -102,9 +91,9 @@ def register():
             return None
 
     if request.method == 'GET':
-        return render_template('register.html', boolean_user = boolean_user)
+        
+        return render_template('register.html')
     else:
-        global utente
         name = request.form.get("name")
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
@@ -113,22 +102,29 @@ def register():
         if cpsw!= psw:
             return 'le password non corrispondono'
         else:
-            global lng, lat
+            if get_place(request.form.get("via")) == None:
+                return render_template('register.html')
             # forniamo 2 variabili vuote da riempire con le 2 coordinate
             lng = get_place(request.form.get("via"))['lng']
             lat = get_place(request.form.get("via"))['lat'] # prende lat e la porta nella funzione get_place, diventa via_input essendo il primo qualcosa
             print(lng)
             print(lat)
             tupla_point = (lng,lat)
+            session['tupla_point'] = tupla_point
             #print(tupla_point)
             # creazione del punto
-            points = Point(tupla_point[0], tupla_point[1])
+            points = Point(session['tupla_point'][0], session['tupla_point'][1])
             
             print(points)
-            # creazione del dizionario 
-            utente = [{"name": name,"surname":surname, "psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points}]
+            # creazione del dizionario
+            session["boolean_user"] = bool(False)
+            # dati_session = [{"email":email,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'lat':lat,'boolean_user':session["boolean_user"]}]
+            # dati_session = dati_session.append(dati_session,ignore_index=True)
+
+            utente = [{"name": name,"surname":surname, "psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
+
             # append dei dati forniti
-            dati = dati.append(utente,ignore_index=True)
+            dati = data.append(utente,ignore_index=True)
             # trasportarli nel file csv a cui si riferisce
             dati.to_csv('./static/file/dati.csv',index=False)
 
@@ -147,7 +143,7 @@ def test():
 # _______________________________________________________________________
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    global tupla_point,user
+    global user
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
@@ -161,7 +157,18 @@ def login():
             session['lng'] = dati[dati["email"] == l_email]["lng"]
             session['lat'] = dati[dati["email"] == l_email]["lat"]
             session['geometry'] = dati[dati["email"] == l_email]["geometry"]
+            
+
+            session['point'] = dati_session[dati_session["email"] == l_email]["point"]
+            session['pos'] = dati_session[dati_session["email"] == l_email]["pos"]
+            session['points'] = dati_session[dati_session["email"] == l_email]["points"]
+            session['place'] = dati_session[dati_session["email"] == l_email]["place"]
+            session['via'] = dati_session[dati_session["email"] == l_email]["via"]
+            session['boolean_user'] = dati_session[dati_session["email"] == l_email]["boolean_user"]
+            session['utente'] = dati_session[dati_session["email"] == l_email]["utente"]
+            
             boolean_user = bool(True)
+            print(session['tupla_point'])
             print(session['geometry'])
             print(session['psw'])
             print(session['lng'])
