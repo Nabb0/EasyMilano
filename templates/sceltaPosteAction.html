@@ -8,16 +8,16 @@
   <div class="bc0">
     <h1>-POSTE-</h1>
     <section id="header-container">
-        <form action="/mappaposte" method = "GET">
-            {%if sceltaposte == 1%}
-            <select name="grado" >
-                <option disabled>SELEZIONA IL QUARTIERE INTERESSATO:</option>
-                {% for quartiere in quartieri%}
-                <li class="menu-item" name="quartiere"><option value="{{quartiere}}" >{{quartiere}}</option></li>
-                {%endfor%}
-            </select>
-            <p><input type = "submit" value = "Submit" /></p>
-        </form>
+      <form action="/mappaposte" method = "GET">
+        {%if sceltaposte == 1%}
+        <select name="quartiere">
+            <option disabled>SELEZIONA IL QUARTIERE INTERESSATO:</option>
+            {% for quartiere in quartieri%}
+            <li class="menu-item" name="quartiere"><option value="{{quartiere}}" >{{quartiere}}</option></li>
+            {%endfor%}
+        </select>
+        <p><input type = "submit" value = "Submit" /></p>
+    </form>
       </section>
 </div>
            {% elif sceltaposte == 3%}

@@ -279,6 +279,7 @@ def posteFunzione():
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
     global sceltaposte
+    
     sceltaposte = request.args["radio"]
     if sceltaposte == "1":
         return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
