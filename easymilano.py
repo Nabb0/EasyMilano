@@ -278,7 +278,6 @@ def posteFunzione():
 
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
-    print(request.args)
     global sceltaposte
     sceltaposte = request.args["radio"]
     if sceltaposte == "1":
