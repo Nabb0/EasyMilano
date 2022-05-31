@@ -285,6 +285,8 @@ def selezione2():
     if sceltaposte == "1":
         return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),val = 1)
     elif sceltaposte == "2":
+        global rangevar
+        rangevar = request.args['rangeposte']
         range = request.args['range']
         return render_template("mappafinaleposte.html",val = 2)
         # return redirect(f'/mappaposte/2/{range}')
@@ -377,7 +379,8 @@ def selezione3():
     if sceltapolice == "1":
         return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltapolice = 1)
     elif sceltapolice == "2":
-        range = request.args['range']
+        global rangevar
+        rangevar = request.args['range2']
         return render_template("mappafinalepolizia.html",sceltapolice = 2)
     elif sceltapolice == "3":
         return render_template("mappafinalepolizia.html",sceltapolice = 3)
@@ -402,7 +405,8 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 
     elif sceltapolice == "2":
-        range_int= int(range)
+        global rangevar
+        range_int= int(rangevar)
         print(range_int)
 
         lng = session['lng'].values[0]
@@ -419,7 +423,7 @@ def mappapolizia():
         dist = comandi_polizialocale.to_crs('EPSG:5234').distance(point) #distanza in metri
         print(dist)
         police_range = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000]
-        print(poste_range)
+        print(police_range)
         police_range.to_crs('EPSG:3857').plot(ax = ax)
         contextily.add_basemap(ax=ax)
         ax.set_axis_off()
