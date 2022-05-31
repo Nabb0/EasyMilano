@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="./static/css/styleschool.css">
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/stylebuttonup.css">
     <title>school</title>
 </head>
 <div class="bc0">
     <h1>-POSTE-</h1>
     <section id="header-container">
-        <form action="/passaggio/<radio>" method = "GET">
+        <form action="/mappaposte/<radio>" method = "GET">
             <select name="grado" >
                 <option disabled>SELEZIONA IL QUARTIERE INTERESSATO:</option>
                 {% for quartiere in quartieri%}

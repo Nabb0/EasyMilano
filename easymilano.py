@@ -223,6 +223,7 @@ def visualizzaqt():
 @app.route('/mappa', methods=['GET'])
 def mappa():
     if scelta == "1":
+        
         fig, ax = plt.subplots(figsize=(12, 8))
         quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
         contextily.add_basemap(ax=ax)
@@ -286,8 +287,6 @@ def selezione2():
         return render_template("mappafinaleposte.html",val = 3)
         # return render_template("mappafinaleposte.html",sceltaposte = 3)
         # return redirect(f'/mappaposte/3/None')
-@app.route('/passaggio/<radio>', methods=['GET'])
-def passaggio(radio):
     return render_template("mappafinaleposte.html",sceltaposte = radio)
 @app.route('/mappaposte/<radio>', methods=['GET'])
 def root_mappaposte(radio):
@@ -432,7 +431,11 @@ def mappapolizia():
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-
+@app.route('/table.png', methods=['GET'])
+def tab():
+    tabella = uffici_polizia_nil.to_html()
+    return render_template("mappafinalepolizia.html", table = tabella)
+    
 
 # _______________________________________________________________________
 # Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622

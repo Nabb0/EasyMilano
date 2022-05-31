@@ -18,8 +18,9 @@ html {
 
 body { 
   justify-content: space-between;
-  text-align: center;
+  text-align:initial ;
   background:linear-gradient(90deg, #080349 10%, #060470 90%); /* W3C */
+  background-size:contain;
   font-family: 'Raleway', sans-serif; 
   font-size: 30px; 
 }
@@ -84,4 +85,7 @@ select option:hover {
   resize:both;
   overflow:hidden;
   box-sizing: border-box;
+}
+table{
+  left: 90%;
 }

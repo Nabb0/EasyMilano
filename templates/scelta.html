@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="./static/css/stylequart.css">
-    <title>school</title>
+    <link rel= "stylesheet" type= "text/css" href= "./static/css/stylebuttonup.css">
+    <title>scelta quartiere</title>
 </head>
 <div class="bc0">
     <h1>-QUARTIERI-</h1>
     <section id="header-container">
-        <form action="/visualizzaqt" method = "GET">
-            <select name="grado" >
-                <option disabled>SELEZIONA IL QUARTIERE DA VISUALIZZARE:</option>
-                {% for quartiere in quartieri%}
-                <li class="menu-item" name="quartiere"><option value="{{quartiere}}" >{{quartiere}}</option></li>
-                {%endfor%}
-            </select>
-            <p><input type = "submit" value = "Submit" /></p>
-        </form>
+      <form action="/visualizzaqt" method = "GET">
+        <select name="quartiere">
+            <option disabled>SELEZIONA IL QUARTIERE INTERESSATO:</option>
+            {% for quartiere in quartieri%}
+            <li class="menu-item" name="quartiere"><option value="{{quartiere}}" >{{quartiere}}</option></li>
+            {%endfor%}
+        </select>
+        <p><input type = "submit" value = "Submit" /></p>
+    </form>
       </section>
     
 </div>
