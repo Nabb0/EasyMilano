@@ -279,27 +279,23 @@ def posteFunzione():
 @app.route('/selezione2', methods=['GET'])
 def selezione2():
     print(request.args)
-    global sceltaposte,val
-    val = 0
+    global sceltaposte
     sceltaposte = request.args["radio"]
     if sceltaposte == "1":
-        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),val = 1)
+        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
     elif sceltaposte == "2":
-        global rangevar
-        rangevar = request.args['rangeposte']
-        range = request.args['range']
-        return render_template("mappafinaleposte.html",val = 2)
+        global rangevarposte
+        rangevarposte = request.args['rangeposte']
+        return render_template("mappafinaleposte.html",sceltaposte = 2)
         # return redirect(f'/mappaposte/2/{range}')
     elif sceltaposte == "3":
-        return render_template("mappafinaleposte.html",val = 3)
+        return render_template("mappafinaleposte.html",sceltaposte = 3)
         # return render_template("mappafinaleposte.html",sceltaposte = 3)
         # return redirect(f'/mappaposte/3/None')
-    return render_template("mappafinaleposte.html",sceltaposte = radio)
-@app.route('/mappaposte/<radio>', methods=['GET'])
-def root_mappaposte(radio):
+@app.route('/mappaposte', methods=['GET'])
+def root_mappaposte():
     # poste in qt selto
-    if val == 1:
-        print(val)
+    if sceltaposte == 1:
         NIL_utente = request.args["quartiere"]
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
@@ -312,11 +308,10 @@ def root_mappaposte(radio):
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return render_template()
+        return Response(output.getvalue(), mimetype='image/png')
 
         #range
-    elif val == 3:
-        print(val)
+    elif sceltaposte == 3:
         fig, ax = plt.subplots(figsize=(12, 8))
 
         uffici_postali.to_crs(epsg=3857).plot(ax=ax, color='r')
@@ -325,10 +320,9 @@ def root_mappaposte(radio):
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-@app.route('/mappaposte/<radio>/<range>', methods=['GET'])
-def root_mappaposte2(radio, range):
-        range = range
-        range_int= int(range)
+    elif sceltaposte == 2:
+        global rangevarposte
+        range_int= int(rangevarposte)
         print(range_int)
 
         #____________________     
@@ -384,7 +378,6 @@ def selezione3():
         return render_template("mappafinalepolizia.html",sceltapolice = 2)
     elif sceltapolice == "3":
         return render_template("mappafinalepolizia.html",sceltapolice = 3)
-
 
 @app.route('/mappapolizia', methods=['GET'])
 def mappapolizia():
