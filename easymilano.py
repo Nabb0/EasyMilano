@@ -67,26 +67,6 @@ scuole_geometry = gpd.GeoDataFrame()
 reg_logout = "./static/images/images route/register.png"
 @app.route('/', methods=['GET'])
 def home():
-    session['email'] = None
-    session['psw'] = None
-    session['lng'] = None
-    session['lat'] = None
-    session['geometry'] = None
-    session['post'] = None
-    session['points'] = None
-    session['place'] = None
-    session['via'] = None
-    session['boolean_user'] = None
-    session['scelta'] = None
-    session['lista_qt'] = None
-    session['sceltaposte'] = None
-    session['rangevarposte'] = None
-    session['sceltapolice'] = None
-    session['rangevar'] = None
-    session['Grado'] = None
-    session['NIL_utente'] = None
-    session['name'] = None
-    session['surname'] = None
     return render_template('home.html', boolean_user = False)
 
 # _______________________________________________________________________
@@ -140,11 +120,11 @@ def register():
             # dati_session = dati_session.append(dati_session,ignore_index=True)
 
             utente = [{"name": name,"surname":surname,"psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
-
+            
             # append dei dati forniti
-            data = dati.append(utente,ignore_index=True)
+            dati = dati.append(utente,ignore_index=True)
             # trasportarli nel file csv a cui si riferisce
-            data.to_csv('./static/file/dati.csv',index=False)
+            dati.to_csv('./static/file/dati.csv',index=False)
 
             return redirect(url_for('login'))
 # _______________________________________________________________________
