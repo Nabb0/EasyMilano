@@ -45,7 +45,7 @@ from shapely.ops import transform
 
 
 # Dichiarazioni dei geodataframe
-data = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
+dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
 
 quartieri = gpd.read_file(
     './static/file/ds964_nil_wm-20220405T093028Z-001.zip')
@@ -67,7 +67,26 @@ scuole_geometry = gpd.GeoDataFrame()
 reg_logout = "./static/images/images route/register.png"
 @app.route('/', methods=['GET'])
 def home():
-    
+    session['email'] = None
+    session['psw'] = None
+    session['lng'] = None
+    session['lat'] = None
+    session['geometry'] = None
+    session['post'] = None
+    session['points'] = None
+    session['place'] = None
+    session['via'] = None
+    session['boolean_user'] = None
+    session['scelta'] = None
+    session['lista_qt'] = None
+    session['sceltaposte'] = None
+    session['rangevarposte'] = None
+    session['sceltapolice'] = None
+    session['rangevar'] = None
+    session['Grado'] = None
+    session['NIL_utente'] = None
+    session['name'] = None
+    session['surname'] = None
     return render_template('home.html', boolean_user = False)
 
 # _______________________________________________________________________
@@ -78,7 +97,6 @@ def home():
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
 # prende il nome della via inserita dall'utente e tramite openstreetmap prende le coordinate separatamente, in modo da creare poi il punto quando serve.
     def get_place(via_input, citta="milano"):
         via_input = '+'.join(via_input.lower().split())
@@ -114,27 +132,21 @@ def register():
             #print(tupla_point)
             # creazione del punto
             points = Point(session['tupla_point'][0], session['tupla_point'][1])
-            
+
             print(points)
             # creazione del dizionario
             session["boolean_user"] = bool(False)
             # dati_session = [{"email":email,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'lat':lat,'boolean_user':session["boolean_user"]}]
             # dati_session = dati_session.append(dati_session,ignore_index=True)
 
-            utente = [{"name": name,"surname":surname, "psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
+            utente = [{"name": name,"surname":surname,"psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
 
             # append dei dati forniti
-            dati = data.append(utente,ignore_index=True)
+            data = dati.append(utente,ignore_index=True)
             # trasportarli nel file csv a cui si riferisce
-            dati.to_csv('./static/file/dati.csv',index=False)
+            data.to_csv('./static/file/dati.csv',index=False)
 
             return redirect(url_for('login'))
-
-# test
-
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    return points.to_html()
 # _______________________________________________________________________
 
     # login
@@ -148,33 +160,40 @@ def login():
     elif request.method == 'POST':
         l_psw = request.form.get("pwd")
         l_email = request.form.get("email")
+        # session['l_psw'] = l_psw
+        # session['l_email'] = l_email
         
-        user= data[(data['email'] == l_email) & (data['psw'] == l_psw)]
+        user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
+        session['user'] = user
         if len(user) != 0 :
-            session['email'] = user['email']
-            session['psw'] = user['psw']
-            session['lng'] = data[data["email"] == l_email]["lng"]
-            session['lat'] = data[data["email"] == l_email]["lat"]
-            session['geometry'] = data[data["email"] == l_email]["geometry"]
+            session['email'] = dati['user']['email']
+            session['psw'] = dati['user']['psw']
+            print(session['email'])
+            print(session['psw'])
+            session['name'] = dati[dati["email"] == l_email]["name"]
+            session['surname'] = dati[dati['email'] == l_email]['surname']
+            session['lng'] = dati[dati["email"] == l_email]["lng"]
+            session['lat'] = dati[dati["email"] == l_email]["lat"]
+            session['geometry'] = dati[dati["email"] == l_email]["geometry"]
             
         # session provenienti da register/login
-            session['post'] = data[data["email"] == l_email]["post"]
-            session['points'] = data[data["email"] == l_email]["points"]
-            session['place'] = data[data["email"] == l_email]["place"]
-            session['via'] = data[data["email"] == l_email]["via"]
-            session['boolean_user'] = data[data["email"] == l_email]["boolean_user"]
-            
-            boolean_user = bool(True)
-            print(session['tupla_point'])
+            session['post'] = dati[dati["email"] == l_email]["post"]
+            session['points'] = dati[dati["email"] == l_email]["points"]
+            session['place'] = dati[dati["email"] == l_email]["place"]
+            session['via'] = dati[dati["email"] == l_email]["via"]
+            session['boolean_user'] = dati[dati["email"] == l_email]["boolean_user"]
+            session["boolean_user"] = bool(True)
+
             print(session['geometry'])
             print(session['psw'])
             print(session['lng'])
             print(session['lat'])
-            print(boolean_user)
+            print(session['boolean_user'])
             return render_template('home.html', boolean_user = True)
         else:
-           print(session['psw'])
-           return('<h1>Utente insesistente, riprova.</h1>')
+           print(dati['psw'])
+           print(dati['email'])
+        return('<h1>Utente insesistente, riprova.</h1>')
 
 
 @app.route("/logout")
@@ -196,6 +215,9 @@ def logout():
     session['sceltapolice'] = None
     session['rangevar'] = None
     session['Grado'] = None
+    session['NIL_utente'] = None
+    session['name'] = None
+    session['surname'] = None
     print(session['email'])
     print(session['psw'])
     print(session['lat'])
@@ -311,6 +333,7 @@ def root_mappaposte():
     # poste in qt selto
     if session['sceltaposte'] == "1":
         NIL_utente = request.args["quartiere"]
+        session['NIL_utente'] = NIL_utente
         quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
         uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
 
@@ -322,7 +345,7 @@ def root_mappaposte():
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return Response(output.getvalue(), mimetype='image/png')
+        return render_template("mappafinaleposte.html",sceltaposte = 1)
 
         #range
     elif session['sceltaposte'] == "3":

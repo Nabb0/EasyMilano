@@ -1,3 +1,10 @@
-name,surname,psw,email,lng,lat,geometry,points,post,place,via,boolean_user
-o,o,ooo,o@hotmail.com,9.2030334,45.4592529,POINT (9.2030334 45.4592529),POINT (9.2030334 45.4592529),"{'lng': 9.2030334, 'lat': 45.4592529}",<function place at 0x7f10c16d7ee0>,"Via Pace, 9",0.0
-a,a,aa,a@hotmail.com,9.1917995,45.5078601,POINT (9.1917995 45.5078601),POINT (9.1917995 45.5078601),"{'lng': 9.1917995, 'lat': 45.5078601}",<function place at 0x7f9fe2bf5d30>,Via Francesco Gatti 14,0.0
+name,surname,psw,email,lng,lat,geometry,points,post,place,via,boolean_user,cpsw
+o,o,ooo,o@hotmail.com,9.2030334,45.4592529,POINT (9.2030334 45.4592529),POINT (9.2030334 45.4592529),"{'lng': 9.2030334, 'lat': 45.4592529}",<function place at 0x7f10c16d7ee0>,"Via Pace, 9",0.0,
+a,a,aa,a@hotmail.com,9.1917995,45.5078601,POINT (9.1917995 45.5078601),POINT (9.1917995 45.5078601),"{'lng': 9.1917995, 'lat': 45.5078601}",<function place at 0x7f9fe2bf5d30>,Via Francesco Gatti 14,0.0,
+t,t,t,t@gmail.com,9.1917995,45.5078601,POINT (9.1917995 45.5078601),POINT (9.1917995 45.5078601),"{'lng': 9.1917995, 'lat': 45.5078601}",<function place at 0x7f36087bcd30>,Via Francesco Gatti 14,0.0,
+n,n,n,n@gmail.com,9.2030334,45.4592529,POINT (9.2030334 45.4592529),POINT (9.2030334 45.4592529),"{'lng': 9.2030334, 'lat': 45.4592529}",<function place at 0x7f1e6afecd30>,"Via Pace, 9",0.0,
+j,j,jj,j@gmail.com,9.188527786082506,45.4992999,POINT (9.188527786082506 45.4992999),POINT (9.188527786082506 45.4992999),"{'lng': 9.188527786082506, 'lat': 45.4992999}",<function place at 0x7f99581edd30>,via valassina 12,0.0,
+b,b,b,b@gmail.com,9.2030334,45.4592529,POINT (9.2030334 45.4592529),POINT (9.2030334 45.4592529),"{'lng': 9.2030334, 'lat': 45.4592529}",<function place at 0x7f4d8f70cd30>,"Via Pace, 9",0.0,
+p,p,p,p@gmail.com,9.2030334,45.4592529,POINT (9.2030334 45.4592529),POINT (9.2030334 45.4592529),"{'lng': 9.2030334, 'lat': 45.4592529}",<function place at 0x7f4bcfee6d30>,"Via Pace, 9",0.0,
+u,u,u,u@gmail.com,9.188527786082506,45.4992999,POINT (9.188527786082506 45.4992999),POINT (9.188527786082506 45.4992999),"{'lng': 9.188527786082506, 'lat': 45.4992999}",<function place at 0x7fcf0129dd30>,via valassina 12,0.0,
+q,q,q,q@gmail.com,9.1917995,45.5078601,POINT (9.1917995 45.5078601),POINT (9.1917995 45.5078601),"{'lng': 9.1917995, 'lat': 45.5078601}",<function place at 0x7f8fe9db9d30>,Via Francesco Gatti 14,0.0,
