@@ -94,6 +94,7 @@ section img#school{
 section img#blu{
     z-index: 20;
 }
+
 #text{
     position: absolute;
     color:#fff;
@@ -135,10 +136,10 @@ section img#blu{
     color: #fff;
     float:initial;
 }
-.sec li img{
-    height: 100px;
+.sec .logo img{
+    height: 150px;
     width: auto;
-    transform: translate(600%, 0%);
+    
 }
 .container{
     text-align: center;

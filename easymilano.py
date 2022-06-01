@@ -166,8 +166,8 @@ def login():
         user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
         session['user'] = user
         if len(user) != 0 :
-            session['email'] = dati['user']['email']
-            session['psw'] = dati['user']['psw']
+            session['email'] = dati[dati['email'] == l_email]['email']
+            session['psw'] = dati[dati['psw'] == l_psw]['psw']
             print(session['email'])
             print(session['psw'])
             session['name'] = dati[dati["email"] == l_email]["name"]

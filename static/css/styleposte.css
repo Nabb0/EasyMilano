@@ -157,7 +157,11 @@ form .signup-link a:hover{
   flex-direction: column;
 }
 
-
+.main-container a{
+  color: white;
+  font-size: 92px;
+  padding-bottom: 10%;
+}
 
 .main-container h2{
   height: 50%;
@@ -194,7 +198,7 @@ form .signup-link a:hover{
   width: 360px;
   height: 400px;
   justify-content: space-between;
-  border: 3px solid transparent;
+  border: 3px solid #f3f3f3;
   display:inline-block ;
   border-radius: 10px;
   position: relative;
@@ -232,7 +236,7 @@ form .signup-link a:hover{
   font-size: 60px;
 }
 .radio_btn .opt-ricerca h3{
-  color:rgb(235, 190, 42) ;
+  color:#ebbe2a ;
   font-size: 16px;
   font-family:"Raleway", sans-serif;
   font-weight: 400;
@@ -242,7 +246,7 @@ form .signup-link a:hover{
   border: 3px solid rgb(235, 190, 42);
 }
 .custom_radio input:checked + .radio_btn>i{
-  opacity: 1;
+  opacity: 3;
   transform: translateX(-50%) scale(1);
 }
 .main-container .p{
