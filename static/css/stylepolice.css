@@ -20,7 +20,7 @@ body {
   justify-content: space-between;
   text-align:initial ;
   background:linear-gradient(90deg, #080349 10%, #060470 90%); /* W3C */
-  background-size:contain;
+  background-size:100%;
   font-family: 'Raleway', sans-serif; 
   font-size: 30px; 
 }
@@ -87,7 +87,15 @@ select option:hover {
   box-sizing: border-box;
 }
 .img{
-  position: relative;
-  top: 30%;
-  left: 50%;
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 auto;
+  position: absolute;
+  transform: translate(150%,50%);
+  border-bottom: 1px solid #e3f1d5;
+  border: 0;
+  font-size: 16px;
 }

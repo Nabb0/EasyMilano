@@ -122,9 +122,9 @@ def register():
             utente = [{"name": name,"surname":surname,"psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
             
             # append dei dati forniti
-            dati = dati.append(utente,ignore_index=True)
+            data = dati.append(utente,ignore_index=True)
             # trasportarli nel file csv a cui si riferisce
-            dati.to_csv('./static/file/dati.csv',index=False)
+            data.to_csv('./static/file/dati.csv',index=False)
 
             return redirect(url_for('login'))
 # _______________________________________________________________________
@@ -142,7 +142,7 @@ def login():
         l_email = request.form.get("email")
         # session['l_psw'] = l_psw
         # session['l_email'] = l_email
-        
+        dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
         user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
         session['user'] = user
         if len(user) != 0 :
@@ -391,9 +391,9 @@ def selezione3():
     elif session['sceltapolice'] == "2":
         rangevar = request.args['range2']
         session['rangevar'] =rangevar
-        return render_template("mappafinalepolizia.html",sceltapolice = 2)
+        return redirect(url_for("tab"))
     elif session['sceltapolice'] == "3":
-        return render_template("mappafinalepolizia.html",sceltapolice = 3)
+        return redirect(url_for("tab"))
 
 @app.route('/mappapolizia', methods=['GET'])
 def mappapolizia():
@@ -429,7 +429,8 @@ def mappapolizia():
         fig, ax = plt.subplots(figsize = (12,8))
         point = Point(lng.values[0],lat.values[0])
         gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
-        dist = comandi_polizialocale.to_crs('EPSG:5234').distance(point) #distanza in metri
+        dist = comandi_polizialocale.to_crs('EPSG:5234').distance(point)
+        session['dist'] = dist #distanza in metri
         print(dist)
         police_range = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000]
         print(police_range)
@@ -450,8 +451,14 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 @app.route('/table.png', methods=['GET'])
 def tab():
-    tabella = uffici_polizia_nil.to_list()
-    return render_template("mappafinalepolizia.html", table = tabella)
+    # session['sceltapolice']
+    # if session['sceltapolice'] == 3:
+    tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo']]
+    return render_template("mappafinalepolizia.html", table = tabella.to_html())
+    # elif session['sceltapolice'] == 2:
+    #     tabella =session['dist'][['Polizia Locale -  Comandi decentrati','Indirizzo']]
+    #     print(tabella)
+    #     return render_template("mappafinalepolizia.html", table = tabella.to_html())
     
 # _______________________________________________________________________
 # Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622
