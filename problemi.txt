@@ -1,12 +1,12 @@
 Quartieri
-visualizza il quartiere in cui trovi non va (ghebrous)
+visualizza il quartiere in cui trovi non va (ghebrous)[risolto]
 
 
 polizia 
-non va range(range no va ,non carica la mappa / se lascio visibile il punto della via, mostra il punto in un'altra parte in mezzo all'oceano.)
+non va range(range no va ,non carica la mappa / se lascio visibile il punto della via, mostra il punto in un'altra parte in mezzo all'oceano.)[risolto]
 
 scuole 
-non far vedere le scuole fuori da milano
+non far vedere le scuole fuori da milano[ignorato]
 
 
 
