@@ -17,3 +17,11 @@ civici = civici.astype({"CODICE_VIA": int}, errors='raise')
 stradario = stradario.astype({"CODICE_VIA": int}, errors='raise') 
 civici.drop('MUNICIPIO',inplace = True,axis = 1)
 vie_milano = pd.merge(civici, stradario, on='CODICE_VIA', how='inner').to_csv('static/file/vie_milano.csv',index=False)
+
+
+
+elif session['sceltapolice'] == 2:
+         print(session['dist'])
+         tabella =session['dist'][['Polizia Locale -  Comandi decentrati','Indirizzo']]
+         print(tabella)
+         return render_template("mappafinalepolizia.html", table = tabella.to_html())

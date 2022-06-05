@@ -266,13 +266,21 @@ form .signup-link a:hover{
   width: 50%;
   height: 65%;
   top: 30%;
-  left: 2%;
+  left: 1%;
   resize:both;
   overflow:hidden;
   box-sizing: border-box;
 }
 .img{
-  position: relative;
-  top: 30%;
-  left: 50%;
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 auto;
+  position: absolute;
+  transform: translate(250%,5%);
+  border-bottom: 1px solid #e3f1d5;
+  border: 0;
+  font-size: 16px;
 }

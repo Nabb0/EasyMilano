@@ -67,6 +67,7 @@ scuole_geometry = gpd.GeoDataFrame()
 reg_logout = "./static/images/images route/register.png"
 @app.route('/', methods=['GET'])
 def home():
+    session['value'] = int()
     return render_template('home.html', boolean_user = False)
 
 # _______________________________________________________________________
@@ -198,6 +199,7 @@ def logout():
     session['NIL_utente'] = None
     session['name'] = None
     session['surname'] = None
+    session['value'] = None
     print(session['email'])
     print(session['psw'])
     print(session['lat'])
@@ -298,14 +300,19 @@ def selezione2():
     sceltaposte = request.args["radio"]
     session['sceltaposte'] = sceltaposte
     if session['sceltaposte'] == "1":
-        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
+        session['value'] = 1
+        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1,)
     elif session['sceltaposte'] == "2":
+        session['value'] = 2
         rangevarposte = request.args['rangeposte']
         session['rangevarposte'] = rangevarposte
-        return render_template("mappafinaleposte.html",sceltaposte = 2)
+        sceltaposte = 2
+        return redirect(url_for("tab"))
         # return redirect(f'/mappaposte/2/{range}')
     elif session['sceltaposte'] == "3":
-        return render_template("mappafinaleposte.html",sceltaposte = 3)
+        session['value'] = 3
+        sceltaposte = 3
+        return redirect(url_for("tab"))
         # return render_template("mappafinaleposte.html",sceltaposte = 3)
         # return redirect(f'/mappaposte/3/None')
 @app.route('/mappaposte', methods=['GET'])
@@ -387,12 +394,15 @@ def selezione3():
     sceltapolice = request.args["scelta"]
     session['sceltapolice'] = sceltapolice
     if session['sceltapolice'] == "1":
+        session['value'] = 4
         return render_template("sceltaPoliziaAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltapolice = 1)
     elif session['sceltapolice'] == "2":
         rangevar = request.args['range2']
         session['rangevar'] =rangevar
+        session['value'] = 5
         return redirect(url_for("tab"))
     elif session['sceltapolice'] == "3":
+        session['value'] = 6
         return redirect(url_for("tab"))
 
 @app.route('/mappapolizia', methods=['GET'])
@@ -430,6 +440,7 @@ def mappapolizia():
         point = Point(lng.values[0],lat.values[0])
         gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
         dist = comandi_polizialocale.to_crs('EPSG:5234').distance(point)
+
         session['dist'] = dist #distanza in metri
         print(dist)
         police_range = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000]
@@ -451,15 +462,44 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 @app.route('/table.png', methods=['GET'])
 def tab():
-    # session['sceltapolice']
-    # if session['sceltapolice'] == 3:
-    tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo']]
-    return render_template("mappafinalepolizia.html", table = tabella.to_html())
-    # elif session['sceltapolice'] == 2:
-    #     tabella =session['dist'][['Polizia Locale -  Comandi decentrati','Indirizzo']]
-    #     print(tabella)
-    #     return render_template("mappafinalepolizia.html", table = tabella.to_html())
-    
+
+    if session['value'] == 6:
+        tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
+        return render_template("mappafinalepolizia.html", table = tabella.to_html())
+    elif session['value'] == 5:
+        session['rangevar']
+        range_int= int(session['rangevar'])
+        print(range_int)
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        point = Point(lng.values[0],lat.values[0])
+
+        dist2 = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000]
+        session['dist2'] = dist2
+        print(session['dist2'])
+        tabella =session['dist2'][['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
+        print(tabella)
+        return render_template("mappafinalepolizia.html", table = tabella.to_html())
+    elif session['value'] == 3:
+        tabella = uffici_postali[['Ente','Indirizzo','Telefono']]
+        return render_template("mappafinaleposte.html", table = tabella.to_html())
+    elif session['value'] == 2:
+        session['rangevarposte']
+        range_int= int(session['rangevarposte'])
+        lng = session['lng'].values[0]
+        lat = session['lat'].values[0]
+        lng = gpd.GeoSeries(lng)
+        lat = gpd.GeoSeries(lat)
+        point = Point(lng.values[0],lat.values[0])
+
+        dist2 = uffici_postali[uffici_postali.distance(point)<=range_int/1000]
+        session['dist2'] = dist2
+        print(session['dist2'])
+        tabella =session['dist2'][['Ente','Indirizzo','Telefono']]
+        print(tabella)
+        return render_template("mappafinaleposte.html", table = tabella.to_html())
 # _______________________________________________________________________
 # Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622
 # https://github.com/Nabb0/Python-appunti-ed-esercizi/blob/main/esercizi/Geopandas/Riva_es6.ipynb

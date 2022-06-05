@@ -14,7 +14,13 @@
 html {
   height: 100%;
 }
-
+body{ 
+  justify-content: space-between;
+  text-align: center;
+  background: linear-gradient(90deg, #9abd63 10%, #ffef62 90%);
+  font-family: 'Raleway', sans-serif; 
+  font-size: 30px; 
+}
 .bc0{ 
   justify-content: space-between;
   text-align: center;
@@ -38,6 +44,7 @@ h1{
   margin-left: auto;
   margin-right: auto ;
 }
+
 /* Select style here */
 
 select {
@@ -52,15 +59,15 @@ select {
 }
 /* scritta sopra  */
 select:hover {
-  background-color: rgba(24, 24, 24, 0.123);
+  background-color: transparent;
   text-align: center;
   color: white;
-  padding: 5px 5px 20px 20px;
+  padding: 50px 5px 20px 25px;
 }
 
 select option {
   background-color: white;
-  color: rgb(31, 31, 31);
+  color: gray;
   text-align: center;
   width: 800px;
   padding: 10px 15px;
@@ -71,5 +78,28 @@ select option {
 select option:hover {
   padding-left: 25px;
   width: 75%;
-  color: #9abd63;
+  color: #ffef62;
+}
+.poltot{
+  position: absolute;
+  width: 50%;
+  height: 65%;
+  top: 30%;
+  left: 2%;
+  resize:both;
+  overflow:hidden;
+  box-sizing: border-box;
+}
+.img{
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 auto;
+  position: absolute;
+  transform: translate(150%,50%);
+  border-bottom: 1px solid #e3f1d5;
+  border: 0;
+  font-size: 16px;
 }
