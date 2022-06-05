@@ -220,7 +220,9 @@ def quartieriFunzione():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
-    lista_qt = quartieri.NIL.to_list()  # DEVO PER FORZA TRASFORMARE IN LISTA
+    quartieri = gpd.read_file(
+'./static/file/ds964_nil_wm-20220405T093028Z-001.zip')
+    lista_qt = quartieri.NIL.to_list()
     session['lista_qt'] = lista_qt
     scelta = request.args["radio"]
     session['scelta'] = scelta
@@ -228,10 +230,9 @@ def selezione():
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif session['scelta'] == "2":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
-    elif session['scelta'] == "3":
-        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif session['scelta'] == "4":
-        return render_template('mappafinaleqt.html')
+        session['value'] == 8
+        return redirect(url_for("tab"))
 
 
 @app.route('/visualizzaqt', methods=['GET'])
@@ -462,8 +463,18 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 @app.route('/table.png', methods=['GET'])
 def tab():
-
-    if session['value'] == 6:
+    if session['value'] == 8:
+            lng = session['lng'].values[0]
+            lat = session['lat'].values[0]
+            lng = gpd.GeoSeries(lng)
+            lat = gpd.GeoSeries(lat)
+            pointz = Point(lng.values[0],lat.values[0])
+            tabella = quartieri[quartieri.contains(pointz)]
+            return render_template("mappafinaleqt.html", table = tabella.to_html())
+    elif session['value'] == 7:
+            tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
+            return render_template("scelta.html", table = tabella.to_html())
+    elif session['value'] == 6:
         tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
         return render_template("mappafinalepolizia.html", table = tabella.to_html())
     elif session['value'] == 5:
