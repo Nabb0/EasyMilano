@@ -78,18 +78,21 @@ def register():
     def get_place(via_input, citta="milano"):
         via_input = '+'.join(via_input.lower().split())
         place = requests.get(f"https://nominatim.openstreetmap.org/search?q={via_input},+{citta},+milano&format=json&polygon=1&addressdetails=1").json()
+        #se c'è invece viene creato post, un dizionario con 2 coordinate.
         if (len(place) != 0):
             post = {"lng": float(place[0]['lon']), "lat": float(place[0]['lat'])}
             #print(pos)
             return post
         else:
+            #se non esiste ritornerà None.
             return None
 
     if request.method == 'GET':
         
         return render_template('register.html')
     else:
-        name = request.form.get("name") #prende i diversi dati dal html(register)
+        #prende i diversi dati dal html(register)
+        name = request.form.get("name") 
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
         cpsw = request.form.get("cpwd")
@@ -116,6 +119,7 @@ def register():
             # dati_session = [{"email":email,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'lat':lat,'boolean_user':session["boolean_user"]}]
             # dati_session = dati_session.append(dati_session,ignore_index=True)
 
+            #creamo utente, in modo da poter appendere nel file csv i dati ricevuti dalla registrazione dell'utente.
             utente = [{"name": name,"surname":surname,"psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
             
             # append dei dati forniti
@@ -139,9 +143,11 @@ def login():
         l_email = request.form.get("email")
         # session['l_psw'] = l_psw
         # session['l_email'] = l_email
+        #ridefinisco dati
         dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
         user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
         session['user'] = user
+        #se user è vuoto, significa che non trova l'utente,se le trova invece si parte con la creazione delle sessioni.
         if len(user) != 0 :
             session['email'] = dati[dati['email'] == l_email]['email']
             session['psw'] = dati[dati['psw'] == l_psw]['psw']
@@ -153,7 +159,7 @@ def login():
             session['lat'] = dati[dati["email"] == l_email]["lat"]
             session['geometry'] = dati[dati["email"] == l_email]["geometry"]
             
-        # session provenienti da register/login
+        # altre session provenienti da register/login e openstreetmap
             session['post'] = dati[dati["email"] == l_email]["post"]
             session['points'] = dati[dati["email"] == l_email]["points"]
             session['place'] = dati[dati["email"] == l_email]["place"]
@@ -175,6 +181,7 @@ def login():
 
 @app.route("/logout")
 def logout():
+    #al logout vengono rese nulle tutte le sessioni, in modo da poter ricominciare il processo alla registrazione/login successiva/o
     session['email'] = None
     session['psw'] = None
     session['lng'] = None
@@ -226,11 +233,12 @@ def selezione():
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))#Mette in ordine quartieri basandosi sulla colonna NIL in maniera alfabetica
     elif session['scelta'] == "2":
         session['value'] = 9
-        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))#Mette in ordine quartieri basandosi sulla colonna NIL in maniera alfabetica
+        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif session['scelta'] == "4":
         session['value'] = 8
-        return redirect(url_for("tab"))# inserire nome della funzione, non della route
-
+# portiamo da tab in modo tale che si possano caricare le informazioni come una tabella(inserire nome della funzione, non della route)
+        return redirect(url_for("tab"))
+        
 
 @app.route('/visualizzaqt', methods=['GET'])
 def visualizzaqt():
@@ -245,8 +253,9 @@ def visualizzaqt():
 def mappa():
     session['scelta']
     session['value']
+    #quartiere sarà uguale alla session quartiere
     quartiere = session['quartiere']
-    session['quartiere'] = quartiere
+    #inzia il filtraggio tramite il valore dati in precedenza durante la scelta del radiobutton
     if session['scelta'] == "1":
         print(session['scelta'])
         session['value']
@@ -256,7 +265,7 @@ def mappa():
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-
+    #dava errore, utilizzo value, un'altro valore dato nel medesimo punto
     elif session['value'] == 8:
         print(session['scelta'])
         session['value']
@@ -304,10 +313,11 @@ def selezione2():
         return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
     elif session['sceltaposte'] == "2":
         session['value'] = 2
-        rangevarposte = request.args['rangeposte']
-        session['rangevarposte'] = rangevarposte
+        rangevarposte = request.args['rangeposte'] # valore dall' input range
+        session['rangevarposte'] = rangevarposte #session['rangevarposte'] assume il valore di rangevarposte
         sceltaposte = 2
         return redirect(url_for("tab"))
+        #alternativa durante il tentativo di usare i valori nella route
         # return redirect(f'/mappaposte/2/{range}')
     elif session['sceltaposte'] == "3":
         session['value'] = 3
@@ -323,6 +333,7 @@ def root_mappaposte():
         print(NIL_utente)
         session['NIL_utente'] = NIL_utente
         print(session['NIL_utente'])
+    #quartiere che contiene nel nome il valore selezionato(che equivale al nome grazie a {{quartiere}} nell'html)
         quartiere = quartieri[quartieri.NIL.str.contains(session['NIL_utente'])]
         uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(session['NIL_utente'])]
 
@@ -340,14 +351,16 @@ def root_mappaposte():
     elif session['sceltaposte'] == "3":
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        uffici_postali.to_crs(epsg=3857).plot(ax=ax, color='r')
+        uffici_postali.to_crs(epsg=3857).plot(ax=ax, color='r')#tutte le poste
         quartieri.to_crs(epsg=3857).plot(ax=ax, alpha=0.5)
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
+
     elif session['sceltaposte'] == "2":
         session['rangevarposte']
+        #trasformiamo il valore del range in un intero
         range_int= int(session['rangevarposte'])
         print(range_int)
 
@@ -357,7 +370,8 @@ def root_mappaposte():
         # s.to_numpy()[n]      | 
         # list(s)[n]          |
         #____________________
-
+        
+        #prendiamo il valore delle sesioni lng e lat, che equivalgono al valore numerico della latitudine e della longitudine
         lng = session['lng'].values[0]
         lat = session['lat'].values[0]
         lng = gpd.GeoSeries(lng)
@@ -367,18 +381,22 @@ def root_mappaposte():
 
 
         fig, ax = plt.subplots(figsize = (12,8))
+        #creazione del punto tramite le coordinate
         point = Point(lng.values[0],lat.values[0])
+        #geoeseries del punto, convertiamo l'epsg, da 4326(valore attribuito automaticamente da openstreetmap) a 3857
         gpd.GeoSeries([point], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
+        #troviamo le distanze tra la nostra posizione e le varie poste
         dist = uffici_postali.to_crs('EPSG:5234').distance(point)
         print(dist)
+        #effettuo il calcolo in proporzione
         poste_range = uffici_postali[uffici_postali.distance(point)<=range_int/1000]
         print(poste_range)
+        #immagine
         poste_range.to_crs('EPSG:3857').plot(ax = ax)
         contextily.add_basemap(ax=ax)
         ax.set_axis_off()
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        # img_poste = urllib.request.urlretrieve("../static/images/img_user/poste/range_poste.jpg")
         return Response(output.getvalue(), mimetype='image/png')
 
 # _______________________________________________________________________
@@ -446,7 +464,8 @@ def mappapolizia():
 
         session['dist'] = dist #distanza in metri
         print(dist)
-        police_range = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000]
+        #correzione dell'unità di misura per la distanza
+        police_range = comandi_polizialocale[comandi_polizialocale.distance(point)<=range_int/1000] 
         print(police_range)
         police_range.to_crs('EPSG:3857').plot(ax = ax)
         contextily.add_basemap(ax=ax)
@@ -465,7 +484,10 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 @app.route('/table.png', methods=['GET'])
 def tab():
+    #filtraggio per la creazione delle mappe e tabelle
     if session['value'] == 9:
+        #quartieri limitrofi
+        #passiamo i dati che necessità per creare poi la mappa nella route finale
             lng = session['lng'].values[0]
             lat = session['lat'].values[0]
             lng = gpd.GeoSeries(lng)
@@ -474,6 +496,7 @@ def tab():
             tabella = quartieri[quartieri.contains(QtConfinanati)][['NIL']]
             return render_template("mappafinaleqt.html", table = tabella.to_html())
     elif session['value'] == 8:
+        #quartiere in cui ti trovi
             lng = session['lng'].values[0]
             lat = session['lat'].values[0]
             lng = gpd.GeoSeries(lng)
@@ -483,12 +506,15 @@ def tab():
             return render_template("mappafinaleqt.html", table = tabella.to_html())
 
     elif session['value'] == 7:
+        #mostrare i comandi di polizia del quartiere scelto
             tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
             return render_template("scelta.html", table = tabella.to_html())
     elif session['value'] == 6:
+        #tutti i comandi di polizia
         tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
         return render_template("mappafinalepolizia.html", table = tabella.to_html())
     elif session['value'] == 5:
+        #range polizia
         session['rangevar']
         range_int= int(session['rangevar'])
         print(range_int)
@@ -505,9 +531,11 @@ def tab():
         print(tabella)
         return render_template("mappafinalepolizia.html", table = tabella.to_html())
     elif session['value'] == 3:
+        #tutte le poste
         tabella = uffici_postali[['Ente','Indirizzo','Telefono']]
         return render_template("mappafinaleposte.html", table = tabella.to_html())
     elif session['value'] == 2:
+        #range poste
         session['rangevarposte']
         range_int= int(session['rangevarposte'])
         lng = session['lng'].values[0]
@@ -522,10 +550,6 @@ def tab():
         tabella =session['dist2'][['Ente','Indirizzo','Telefono']]
         print(tabella)
         return render_template("mappafinaleposte.html", table = tabella.to_html())
-# _______________________________________________________________________
-# Scuole non va https://www.dati.lombardia.it/widgets/9pqm-h622
-# https://github.com/Nabb0/Python-appunti-ed-esercizi/blob/main/esercizi/Geopandas/Riva_es6.ipynb
-# _______________________________________________________________________
 
 @app.route('/scuole', methods=['GET'])
 def SceltaGrado():
@@ -535,6 +559,7 @@ def SceltaGrado():
 @app.route('/Gradoselezionato', methods=['GET'])
 def Gradoselezionato():
     Grado = request.args["grado"]
+    #session Grado assume il valore della scelta dell'utente
     session['Grado'] = Grado
     if session['Grado'] == "Ctp":
         return render_template("mappafinalescuole.html")
@@ -553,10 +578,12 @@ def mappascuole():
     Grado = session['Grado']
     if Grado == "Ctp":
         #milano=quartieri[quartieri.intersects(quartieri.unary_union)]
+        #prendiamo le scuole del grado scelto
         scuola_geo = scuole[scuole["Tipologia"] == Grado]
         print(scuola_geo.crs)
+        #creazione del punto tramite le 2 coordinate
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
-            scuola_geo["coorX"], scuola_geo["coorY"]))
+            scuola_geo["coorX"], scuola_geo["coorY"]))#creazione di un punto prendendo come dati prima la longitudine (x) e poi la latitudine (y)
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -573,7 +600,7 @@ def mappascuole():
         scuola_geo = scuole[scuole["Tipologia"] == Grado]
         print(scuola_geo.crs)
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
-            scuola_geo["coorX"], scuola_geo["coorY"]))
+            scuola_geo["coorX"], scuola_geo["coorY"])) #creazione di un punto prendendo come dati prima la longitudine (x) e poi la latitudine (y)
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -607,7 +634,7 @@ def mappascuole():
         scuola_geo = scuole[scuole["Tipologia"] == Grado]
         print(scuola_geo.crs)
         scuola_geo = gpd.GeoDataFrame(scuola_geo, geometry=gpd.points_from_xy(
-         scuola_geo["coorX"], scuola_geo["coorY"]))
+         scuola_geo["coorX"], scuola_geo["coorY"])) #creazione di un punto prendendo come dati prima la longitudine (x) e poi la latitudine (y)
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
