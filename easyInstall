@@ -1,6 +1,6 @@
 pip install flask pandas geopandas matplotlib contextily Flask-Session
 python -m pip install mysql-connector-python
-
+python easymilano.py
 
 
                     <li class="menu-item" value="grado"><a href="#0" value="grado">Ctp</a></li>

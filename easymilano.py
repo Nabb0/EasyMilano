@@ -229,9 +229,10 @@ def selezione():
     if session['scelta'] == "1":
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif session['scelta'] == "2":
+        session['value'] = 9
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif session['scelta'] == "4":
-        session['value'] == 8
+        session['value'] = 8
         return redirect(url_for("tab"))# inserire nome della funzione, non della route
 
 
@@ -247,8 +248,12 @@ def visualizzaqt():
 @app.route('/mappa', methods=['GET'])
 def mappa():
     session['scelta']
+    session['value']
     quartiere = session['quartiere']
+    session['quartiere'] = quartiere
     if session['scelta'] == "1":
+        print(session['scelta'])
+        session['value']
         fig, ax = plt.subplots(figsize=(12, 8))
         quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
         contextily.add_basemap(ax=ax)
@@ -256,30 +261,29 @@ def mappa():
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
 
-    elif session['scelta'] == '4':
-       
+    elif session['value'] == 8:
+        print(session['scelta'])
+        session['value']
         lng = session['lng'].values[0]
         lat = session['lat'].values[0]
         lng = gpd.GeoSeries(lng)
         lat = gpd.GeoSeries(lat)
         print(lng)
         print(lat)
-
-
+        
         fig, ax = plt.subplots(figsize = (12,8))
         pointz = Point(lng.values[0],lat.values[0])
         gpd.GeoSeries([pointz], crs='EPSG:4326').to_crs('EPSG:3857').plot(ax=ax, color='red')
         quart_in = quartieri[quartieri.contains(pointz)]
-        print(quart_in)
         quart_in.to_crs('EPSG:3857').plot(ax = ax, alpha=0.5)
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
-    else:
+    elif session['value'] == 9:
+        print(session['scelta'])
         fig, ax = plt.subplots(figsize=(12, 8))
-        QtConfinanati = quartieri[quartieri.touches(
-            quartiere.geometry.squeeze())]
+        QtConfinanati = quartieri[quartieri.touches(quartiere.geometry.squeeze())]
         QtConfinanati.to_crs(epsg=3857).plot(ax=ax, facecolor='r')
         quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.5, edgecolor='k')
         contextily.add_basemap(ax=ax)
@@ -465,13 +469,21 @@ def mappapolizia():
         return Response(output.getvalue(), mimetype='image/png')
 @app.route('/table.png', methods=['GET'])
 def tab():
-    if session['value'] == 8:
+    if session['value'] == 9:
+            lng = session['lng'].values[0]
+            lat = session['lat'].values[0]
+            lng = gpd.GeoSeries(lng)
+            lat = gpd.GeoSeries(lat)
+            QtConfinanati = quartieri[quartieri.touches(quartiere.geometry.squeeze())]
+            tabella = quartieri[quartieri.contains(QtConfinanati)][['NIL']]
+            return render_template("mappafinaleqt.html", table = tabella.to_html())
+    elif session['value'] == 8:
             lng = session['lng'].values[0]
             lat = session['lat'].values[0]
             lng = gpd.GeoSeries(lng)
             lat = gpd.GeoSeries(lat)
             pointz = Point(lng.values[0],lat.values[0])
-            tabella = quartieri[quartieri.contains(pointz)]
+            tabella = quartieri[quartieri.contains(pointz)][['NIL']]
             return render_template("mappafinaleqt.html", table = tabella.to_html())
 
     elif session['value'] == 7:
