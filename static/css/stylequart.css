@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway);
-
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
 * {
   margin: 0;
   padding: 0;
@@ -103,7 +103,26 @@ select option:hover {
   border: 0;
   font-size: 16px;
 }
-.back_arrow{
-height: 10px;
-width: auto;
+input[type = submit] {
+  position: absolute;
+  color: aliceblue;
+  transform: translate(-50%, -200%);
+  background-color: transparent;
+  border: 5px solid transparent;
+  border-radius: 3ch;
+  text-decoration: none;
+  font-size: 2em;
+  display: inline-block;
+  font-family: Montserrat;
+  text-transform: uppercase;
+  padding: 0.5em 2em;
+  box-shadow: 0 0 30px #d8db1abd;
+  transition: 0.02s 0.2s cubic-bezier(0.1, 0, 0.1, 1);
+}
+.back_arrow img{
+  width: 12%;  
+  height: auto;  
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }

@@ -59,8 +59,9 @@ scuole_geometry = gpd.GeoDataFrame()
 reg_logout = "./static/images/images route/register.png"
 @app.route('/', methods=['GET'])
 def home():
+    session["boolean_user"] = bool(False)
     session['value'] = int()
-    return render_template('home.html', boolean_user = False)
+    return render_template('home.html',boolean = session["boolean_user"])
 
 # _______________________________________________________________________
 
@@ -112,7 +113,7 @@ def register():
             print(points)
             # creazione del dizionario
             #creo una sessione con valore booleano, servirà per controllare se si ha effettuato il login i meno
-            session["boolean_user"] = bool(False)
+
             # dati_session = [{"email":email,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'lat':lat,'boolean_user':session["boolean_user"]}]
             # dati_session = dati_session.append(dati_session,ignore_index=True)
 
@@ -123,7 +124,7 @@ def register():
             data = dati.append(utente,ignore_index=True)
             # trasportarli nel file csv a cui si riferisce
             data.to_csv('./static/file/dati.csv',index=False)
-
+            
             return redirect(url_for('login'))
 # _______________________________________________________________________
 
@@ -169,7 +170,7 @@ def login():
             print(session['lng'])
             print(session['lat'])
             print(session['boolean_user'])
-            return render_template('home.html', boolean_user = True)
+            return render_template('home.html', boolean = session["boolean_user"])
         else:
            print(dati['psw'])
            print(dati['email'])
