@@ -19,10 +19,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 matplotlib.use('Agg')
 
-#___________________________________________________________________________________________________________________________________________________________________________________________________________________________
-#importazioni necessarie per street map
-
-
 
 app = Flask(__name__)
 
@@ -100,6 +96,7 @@ def register():
         if cpsw!= psw: #Controlla se la password inserita e ripetuta sono uguali
             return 'le password non corrispondono' #Controllo fallito 
         else: #Controllo riuscito con esito positivo
+            #si fa il controllo se la via effettivamente esiste o meno, se non esite, riporta al register
             if get_place(request.form.get("via")) == None:
                 return render_template('register.html')
             # forniamo 2 variabili vuote da riempire con le 2 coordinate
@@ -109,12 +106,12 @@ def register():
             print(lat)
             tupla_point = (lng,lat)
             session['tupla_point'] = tupla_point
-            #print(tupla_point)
             # creazione del punto
             points = Point(session['tupla_point'][0], session['tupla_point'][1])
 
             print(points)
             # creazione del dizionario
+            #creo una sessione con valore booleano, servirà per controllare se si ha effettuato il login i meno
             session["boolean_user"] = bool(False)
             # dati_session = [{"email":email,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'lat':lat,'boolean_user':session["boolean_user"]}]
             # dati_session = dati_session.append(dati_session,ignore_index=True)

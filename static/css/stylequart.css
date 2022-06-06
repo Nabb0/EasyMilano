@@ -103,3 +103,7 @@ select option:hover {
   border: 0;
   font-size: 16px;
 }
+.back_arrow{
+height: 10px;
+width: auto;
+}
