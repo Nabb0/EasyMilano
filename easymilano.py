@@ -19,7 +19,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 matplotlib.use('Agg')
 
-
+#___________________________________________________________________________________________________________________________________________________________________________________________________________________________
 #importazioni necessarie per street map
 
 
@@ -43,25 +43,21 @@ from functools import partial
 import pyproj
 from shapely.ops import transform
 
-
+#___________________________________________________________________________________________________________________________________________________________________________________________________________________________
 # Dichiarazioni dei geodataframe
 dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
 
-quartieri = gpd.read_file(
-    './static/file/ds964_nil_wm-20220405T093028Z-001.zip')
+quartieri = gpd.read_file('./static/file/ds964_nil_wm-20220405T093028Z-001.zip')
 
 mezzi_superficie = gpd.read_file('./static/file/tpl_percorsi.geojson')
 
-uffici_postali = gpd.read_file(
-    './static/file/ds555_uffici_postali_milano_final.geojson')
+uffici_postali = gpd.read_file('./static/file/ds555_uffici_postali_milano_final.geojson')
 
-# vie_milano =
 
-comandi_polizialocale = gpd.read_file(
-    './static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
 
-scuole = gpd.read_file(
-    './static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv', epsg=3857)
+comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
+
+scuole = gpd.read_file('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogni_ordine_e_grado.csv', epsg=3857)
 scuole_geometry = gpd.GeoDataFrame()
 
 reg_logout = "./static/images/images route/register.png"
@@ -93,14 +89,14 @@ def register():
         
         return render_template('register.html')
     else:
-        name = request.form.get("name")
+        name = request.form.get("name") #prende i diversi dati dal html(register)
         surname = request.form.get("surname")
         psw = request.form.get("pwd")
         cpsw = request.form.get("cpwd")
         email = request.form.get("email")
-        if cpsw!= psw:
-            return 'le password non corrispondono'
-        else:
+        if cpsw!= psw: #Controlla se la password inserita e ripetuta sono uguali
+            return 'le password non corrispondono' #Controllo fallito 
+        else: #Controllo riuscito con esito positivo
             if get_place(request.form.get("via")) == None:
                 return render_template('register.html')
             # forniamo 2 variabili vuote da riempire con le 2 coordinate
@@ -205,6 +201,7 @@ def logout():
     print(session['lat'])
     print(session['lng'])
     return redirect(url_for('home'))
+    #assegna a tutte le variabili un valore non noto 
 # _______________________________________________________________________
 
 
@@ -220,17 +217,16 @@ def quartieriFunzione():
 
 @app.route('/selezione', methods=['GET'])
 def selezione():
-    quartieri = gpd.read_file(
-'./static/file/ds964_nil_wm-20220405T093028Z-001.zip')
-    lista_qt = quartieri.NIL.to_list()
+    quartieri = gpd.read_file('./static/file/ds964_nil_wm-20220405T093028Z-001.zip')
+    lista_qt = quartieri.NIL.to_list() #creazione di una lista con soltanto la colonna NIL
     session['lista_qt'] = lista_qt
-    scelta = request.args["radio"]
+    scelta = request.args["radio"] #Riferimaneto sulla funzione scelta
     session['scelta'] = scelta
     if session['scelta'] == "1":
-        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
+        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))#Mette in ordine quartieri basandosi sulla colonna NIL in maniera alfabetica
     elif session['scelta'] == "2":
         session['value'] = 9
-        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
+        return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))#Mette in ordine quartieri basandosi sulla colonna NIL in maniera alfabetica
     elif session['scelta'] == "4":
         session['value'] = 8
         return redirect(url_for("tab"))# inserire nome della funzione, non della route
@@ -238,11 +234,11 @@ def selezione():
 
 @app.route('/visualizzaqt', methods=['GET'])
 def visualizzaqt():
-    nome_quartiere = request.args["quartiere"]
-    quartiere = quartieri[quartieri.NIL.str.contains(nome_quartiere)]
+    nome_quartiere = request.args["quartiere"] #Chiede valore di quartiere 
+    quartiere = quartieri[quartieri.NIL.str.contains(nome_quartiere)]#variabile che contine tutti i dati di quartiere es.geometry
     session['quartiere'] = quartiere
     print(session['quartiere'])
-    return render_template('mappafinaleqt.html')
+    return render_template('mappafinaleqt.html')#Visualizzazione della mappa del quartiere
 
 
 @app.route('/mappa', methods=['GET'])
