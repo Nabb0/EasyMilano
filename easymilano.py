@@ -232,7 +232,7 @@ def selezione():
         return render_template('scelta.html', quartieri=quartieri.NIL.sort_values(ascending=True))
     elif session['scelta'] == "4":
         session['value'] == 8
-        return redirect(url_for("tab"))
+        return redirect(url_for("tab"))# inserire nome della funzione, non della route
 
 
 @app.route('/visualizzaqt', methods=['GET'])
@@ -257,7 +257,6 @@ def mappa():
         return Response(output.getvalue(), mimetype='image/png')
 
     elif session['scelta'] == '4':
-        fig, ax = plt.subplots(figsize=(24, 16))
        
         lng = session['lng'].values[0]
         lat = session['lat'].values[0]
@@ -302,7 +301,7 @@ def selezione2():
     session['sceltaposte'] = sceltaposte
     if session['sceltaposte'] == "1":
         session['value'] = 1
-        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1,)
+        return render_template("sceltaPosteAction.html", quartieri=quartieri.NIL.sort_values(ascending=True),sceltaposte = 1)
     elif session['sceltaposte'] == "2":
         session['value'] = 2
         rangevarposte = request.args['rangeposte']
@@ -321,9 +320,11 @@ def root_mappaposte():
     # poste in qt selto
     if session['sceltaposte'] == "1":
         NIL_utente = request.args["quartiere"]
+        print(NIL_utente)
         session['NIL_utente'] = NIL_utente
-        quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
-        uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(NIL_utente)]
+        print(session['NIL_utente'])
+        quartiere = quartieri[quartieri.NIL.str.contains(session['NIL_utente'])]
+        uffici_postali_nil = uffici_postali[uffici_postali.NIL.str.contains(session['NIL_utente'])]
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -333,7 +334,7 @@ def root_mappaposte():
         contextily.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
-        return render_template("mappafinaleposte.html",sceltaposte = 1)
+        return Response(output.getvalue(), mimetype='image/png')
 
         #range
     elif session['sceltaposte'] == "3":
@@ -411,8 +412,9 @@ def mappapolizia():
 
     if session['sceltapolice'] == "1":
         NIL_utente = request.args["quartiere"]
-        quartiere = quartieri[quartieri.NIL.str.contains(NIL_utente)]
-        uffici_polizia_nil = comandi_polizialocale[comandi_polizialocale.NIL.str.contains(NIL_utente)]
+        session['NIL_utente_police'] = NIL_utente
+        quartiere = quartieri[quartieri.NIL.str.contains(session['NIL_utente_police'])]
+        uffici_polizia_nil = comandi_polizialocale[comandi_polizialocale.NIL.str.contains(session['NIL_utente_police'])]
 
         # immagine
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -471,6 +473,7 @@ def tab():
             pointz = Point(lng.values[0],lat.values[0])
             tabella = quartieri[quartieri.contains(pointz)]
             return render_template("mappafinaleqt.html", table = tabella.to_html())
+
     elif session['value'] == 7:
             tabella = comandi_polizialocale[['Polizia Locale -  Comandi decentrati','Indirizzo','email']]
             return render_template("scelta.html", table = tabella.to_html())
