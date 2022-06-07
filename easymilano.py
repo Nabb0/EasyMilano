@@ -54,6 +54,7 @@ scuole_geometry = gpd.GeoDataFrame()
 
 reg_logout = "./static/images/images route/register.png"
 
+
 @app.route('/', methods=['GET'])
 def home():
     if not session.get('email'):

@@ -1,4 +1,4 @@
-pip install flask pandas geopandas matplotlib contextily Flask-Session
-python -m pip install mysql-connector-python
-python easymilano.py
-
+se non ha i permessi:
+chmod +x start.bat
+:
+./start.bat
