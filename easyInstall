@@ -1,4 +1,5 @@
 se non ha i permessi:
+(serve per autorizzare l'esecuzione del file e l'altro(chmod 777 start.bat) serve per autorizzare lettura, scrittura ed esecuzione da parte di tutti gli utenti)
 chmod +x start.bat
 :
 ./start.bat
