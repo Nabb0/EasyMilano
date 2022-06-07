@@ -45,11 +45,7 @@ dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
 
 quartieri = gpd.read_file('./static/file/ds964_nil_wm-20220405T093028Z-001.zip')
 
-mezzi_superficie = gpd.read_file('./static/file/tpl_percorsi.geojson')
-
 uffici_postali = gpd.read_file('./static/file/ds555_uffici_postali_milano_final.geojson')
-
-
 
 comandi_polizialocale = gpd.read_file('./static/file/geocoded_comandi-decentrati-polizia-locale__final.geojson')
 
@@ -59,7 +55,14 @@ scuole_geometry = gpd.GeoDataFrame()
 reg_logout = "./static/images/images route/register.png"
 @app.route('/', methods=['GET'])
 def home():
-    session["boolean_user"] = bool(False)
+    if session['email'] is None or False:
+        session["boolean_user"] = bool(False)
+        print("none")
+        print(session["boolean_user"])
+    else:
+        session["boolean_user"] = bool(True)
+        print("true")
+        print(session["boolean_user"])
     session['value'] = int()
     return render_template('home.html',boolean = session["boolean_user"])
 
@@ -95,7 +98,7 @@ def register():
         cpsw = request.form.get("cpwd")
         email = request.form.get("email")
         if cpsw!= psw: #Controlla se la password inserita e ripetuta sono uguali
-            return 'le password non corrispondono' #Controllo fallito 
+            return render_template('register.html') #Controllo fallito 
         else: #Controllo riuscito con esito positivo
             #si fa il controllo se la via effettivamente esiste o meno, se non esite, riporta al register
             if get_place(request.form.get("via")) == None:
@@ -109,7 +112,6 @@ def register():
             session['tupla_point'] = tupla_point
             # creazione del punto
             points = Point(session['tupla_point'][0], session['tupla_point'][1])
-
             print(points)
             # creazione del dizionario
             #creo una sessione con valore booleano, servirà per controllare se si ha effettuato il login i meno
@@ -120,6 +122,8 @@ def register():
             #creamo utente, in modo da poter appendere nel file csv i dati ricevuti dalla registrazione dell'utente.
             utente = [{"name": name,"surname":surname,"psw": psw,"email":email,'lng':lng,'lat':lat,'geometry':points,"points": points,"post":get_place(request.form.get("via")),"place":place,'via':request.form.get("via"),'boolean_user':session["boolean_user"]}]
             
+            
+            dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
             # append dei dati forniti
             data = dati.append(utente,ignore_index=True)
             # trasportarli nel file csv a cui si riferisce
@@ -137,10 +141,14 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
+        check_login = bool(True)
+        session['check_login'] = check_login
         l_psw = request.form.get("pwd")
         l_email = request.form.get("email")
-        # session['l_psw'] = l_psw
-        # session['l_email'] = l_email
+        session['l_psw'] = l_psw
+        l_psw = session['l_psw'] 
+        session['l_email'] = l_email
+        l_email =session['l_email']  
         #ridefinisco dati
         dati = pd.read_csv("./static/file/dati.csv",on_bad_lines=skip,engine='python')
         user= dati[(dati['email'] == l_email) & (dati['psw'] == l_psw)]
@@ -174,7 +182,7 @@ def login():
         else:
            print(dati['psw'])
            print(dati['email'])
-        return('<h1>Utente insesistente, riprova.</h1>')
+        return render_template("login.html",check_login = bool(False))
 
 
 @app.route("/logout")
@@ -201,6 +209,7 @@ def logout():
     session['name'] = None
     session['surname'] = None
     session['value'] = None
+    session['check_login'] = None
     print(session['email'])
     print(session['psw'])
     print(session['lat'])

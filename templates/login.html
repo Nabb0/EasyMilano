@@ -6,7 +6,7 @@
         <div class="form-box">
             <div class="button-box">
                 <div id="btn2"></div>
-                <button type="button" class="toggle-btn"><h1>LOGIN</h1></button>
+                <button type="button" class="toggle-btn" onclick="error()"><h1>LOGIN</h1></button>
             </div>
             <form class="input"action="/login" method="POST">
                 <p>Email<input type="email" name="email" pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" placeholder="email" size="30"  class="input-field" required></p>
@@ -21,3 +21,12 @@
 
     </div>
 </body>
+
+
+<script>
+function error() {
+if ( check_login == False) {	
+    alert("utente inesistente,riprova");
+    }
+}
+</script>
