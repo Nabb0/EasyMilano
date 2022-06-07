@@ -56,7 +56,7 @@ reg_logout = "./static/images/images route/register.png"
 
 @app.route('/', methods=['GET'])
 def home():
-    if session['email'] is None or False:
+    if not session['email']:
         session["boolean_user"] = bool(False)
     else:
         session["boolean_user"] = bool(True)
@@ -152,8 +152,8 @@ def login():
         session['user'] = user
         #se user è vuoto, significa che non trova l'utente,se le trova invece si parte con la creazione delle sessioni.
         if len(user) != 0 :
-            session['email'] = dati[dati['email'] == l_email]['email']
-            session['psw'] = dati[dati['psw'] == l_psw]['psw']
+            session['email'] = l_email
+            session['psw'] = l_psw
             print(session['email'])
             print(session['psw'])
             session['name'] = dati[dati["email"] == l_email]["name"]

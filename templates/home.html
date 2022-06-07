@@ -47,6 +47,16 @@
     </a>
     
   </div>
+  {% if boolean == False %}
+    <div class="container">
+      <li>
+        <a href="/register"><img src="static/images/images route/police-station.png" alt="police" target='_blank'></a>
+        <a href="/register"><img src="static/images/images route/post-office.png" alt="poste"></a>
+        <a href="/register"><img src="static/images/images route/quartieri.png" alt="register"></a>
+        <a href="/register"><img src="static/images/images route/school.png" alt="school" target='_blank'></a>
+      </li>
+    </div>
+  {% elif boolean == True %}
     <div class="container">
         <li>
           <a href="/polizia"><img src="static/images/images route/police-station.png" alt="police" target='_blank'></a>
@@ -55,6 +65,7 @@
           <a href="/scuole"><img src="static/images/images route/school.png" alt="school" target='_blank'></a>
         </li>
     </div>
+  {% endif %}
   <script>
     
     let metro = document.getElementById('metro');
