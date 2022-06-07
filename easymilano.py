@@ -56,7 +56,7 @@ reg_logout = "./static/images/images route/register.png"
 
 @app.route('/', methods=['GET'])
 def home():
-    if not session['email']:
+    if not session.get('email'):
         session["boolean_user"] = bool(False)
     else:
         session["boolean_user"] = bool(True)
