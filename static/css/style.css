@@ -257,6 +257,7 @@ section img#blu{
     display: block;
     margin: auto;
     background: linear-gradient(to right,#ff105f,#ffad06);
+    color: #fff;
     border: 0;
     border: none;
     border-radius: 30px;
