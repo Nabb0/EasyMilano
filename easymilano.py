@@ -53,17 +53,14 @@ scuole = gpd.read_file('./static/file/CITTA_METROPOLITANA_MILANO_-_Scuole_di_ogn
 scuole_geometry = gpd.GeoDataFrame()
 
 reg_logout = "./static/images/images route/register.png"
+
 @app.route('/', methods=['GET'])
 def home():
     if session['email'] is None or False:
         session["boolean_user"] = bool(False)
-        print("none")
-        print(session["boolean_user"])
     else:
         session["boolean_user"] = bool(True)
-        print("true")
-        print(session["boolean_user"])
-    session['value'] = int()
+        session['value'] = int()
     return render_template('home.html',boolean = session["boolean_user"])
 
 # _______________________________________________________________________
