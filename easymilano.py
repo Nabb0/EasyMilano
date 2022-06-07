@@ -67,7 +67,6 @@ def home():
 
     # register
 
-
 # _____________________________________________________________________
 @app.route('/register', methods=['GET', 'POST'])
 def register():
